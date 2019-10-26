@@ -11,6 +11,8 @@ export const EDIT_CUSTOMER = 'EDIT_CUSTOMER'
 
 export const ADD_ROOM = 'ADD_ROOM'
 export const EDIT_ROOM = 'EDIT_ROOM'
+export const GET_CHECK_IN = 'GET_CHECK_IN'
+
 
 
 

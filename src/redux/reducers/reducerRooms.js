@@ -2,7 +2,8 @@ import * as types from './../types'
 
 const initialState = {
   rooms:[],
-  addRoom:[]
+  addRoom:[],
+  checkIn:[]
 };
 
 export default function reducerRooms(state = initialState, action) {
@@ -52,6 +53,21 @@ export default function reducerRooms(state = initialState, action) {
       return {
           ...state,
           }   
+
+          case `${types.GET_CHECK_IN}_PENDING`:
+            return {
+                ...state,
+            };
+      
+            case `${types.GET_CHECK_IN}_FULFILLED`:
+            return {
+                ...state,
+            };
+      
+            case `${types.GET_CHECK_IN}_REJECTED`:
+            return {
+                ...state,
+                }
       default:
         return state;
   }

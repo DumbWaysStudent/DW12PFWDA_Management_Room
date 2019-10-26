@@ -49,6 +49,7 @@ class Rooms extends Component{
         )
     }
     render(){
+      console.log(this.props.checkInLocal.checkIn)
       const {rooms} = this.props.roomsLocal
       return (
         <Container>
@@ -66,7 +67,6 @@ class Rooms extends Component{
             })}>
               <View style={[styles.itemContainer, { backgroundColor: 'green' }]}>
               <Text style={styles.itemName}>{item.name}</Text>
-              <Text style={styles.itemCode}>{item.name}</Text>
             </View>
             </TouchableOpacity>
             
@@ -124,6 +124,7 @@ class Rooms extends Component{
 const mapStateToProps = state => {
   return {
     loginLocal: state.login,
+    checkInLocal: state.checkIn,
     roomsLocal: state.rooms,
   }
 }
@@ -131,7 +132,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     handleAddRoom: (params) => dispatch(actionRooms.handleAddRoom(params)),
-    handleGetRooms: (params) => dispatch(actionRooms.handleGetRooms(params))      
+    handleGetRooms: (params) => dispatch(actionRooms.handleGetRooms(params)),   
+    handleGetCheckIn: (params) => dispatch(actionRooms.handleGetCheckIn(params)),
+
   }
 }
 

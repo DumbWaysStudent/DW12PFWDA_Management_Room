@@ -41,3 +41,14 @@ export const handleEditRoom = (params) => ({
   }
   })
 });
+
+export const handleGetCheckIn = (params) => ({
+  type: types.GET_CHECK_IN,
+  payload: axios({
+    method:'GET',
+    url:`http://192.168.43.24:9876/api/v1/checkin`,
+  headers:{
+      Authorization:`Bearer ${params.token}`
+  }
+  })
+});

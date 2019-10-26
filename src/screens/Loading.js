@@ -13,6 +13,9 @@ class Loading extends Component{
           await this.props.handleGetRooms({
             token:this.props.loginLocal.login.token
           })
+          await this.props.handleGetCheckIn({
+            token:this.props.loginLocal.login.token
+          })
           this.props.navigation.navigate('Home')
         }, 0);
     }
@@ -51,7 +54,8 @@ const styles = StyleSheet.create({
   
   const mapDispatchToProps = dispatch => {
     return {
-      handleGetRooms: (params) => dispatch(actionRooms.handleGetRooms(params))      
+      handleGetRooms: (params) => dispatch(actionRooms.handleGetRooms(params)), 
+      handleGetCheckIn: (params) => dispatch(actionRooms.handleGetCheckIn(params))      
     }
   }
   
