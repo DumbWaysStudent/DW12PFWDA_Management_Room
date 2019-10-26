@@ -79,10 +79,7 @@ class Login extends Component{
                         </View>
                         <Button success block rounded style = {styles.Button} onPress = {()=>this.loginChecker()}><Text>Log In</Text></Button>
                     </Form> 
-                    {/* <Text>Don't have an account?</Text><Text onPress={()=>this.props.navigation.navigate('Register')} style = {styles.Text}>Become a Hubbers</Text>   */}
-
                 </ImageBackground>
-
             </View>
         )
     }

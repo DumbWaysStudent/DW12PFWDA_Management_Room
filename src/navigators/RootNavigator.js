@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Login from '../screens/Login'
+import Register from '../screens/Register'
 import Loading from '../screens/Loading'
 import EditRoom from '../screens/EditRoom'
 import EditProfile from '../screens/EditProfile'
@@ -56,11 +57,15 @@ const HomeStack = createStackNavigator({
 
 },{initialRouteName : 'BottomStack'}
 )
-
+const AccountStack = createStackNavigator({
+  Login : {screen : Login, navigationOptions : ()=>({header : null})},
+  Register : {screen : Register, navigationOptions : ()=>({header : null})}
+},{initialRouteName : 'Login'}
+)
 
 const RootNavigator = createSwitchNavigator({
   
-  Account : Login,
+  Account : AccountStack,
   Loading: Loading,
   Home: HomeStack,   
 })

@@ -14,13 +14,29 @@ export default function reducerCustomers(state = initialState, action) {
       case `${types.GET_CUSTOMERS}_FULFILLED`:
         return {
           ...state,
-          GET_CUSTOMERS: action.payload.data.result
+          customers: action.payload.data.result
         }
   
       case `${types.GET_CUSTOMERS}_REJECTED`:
         return {
           ...state,
         }
+
+        
+        case `${types.ADD_CUSTOMER}_PENDING`:
+        return {
+            ...state,
+        };
+    
+        case `${types.ADD_CUSTOMER}_FULFILLED`:
+        return {
+            ...state,
+        }
+    
+        case `${types.ADD_CUSTOMER}_REJECTED`:
+        return {
+            ...state,
+        }  
     default:
       return state;
   }

@@ -75,12 +75,10 @@ class Register extends Component{
     
     render(){
         return(
-            <View>
+            <Container style={{justifyContent:'center'}}>
                 <ImageBackground source = {require('../assets/background.jpg')} style = {styles.Background}>
-                    <View style = {styles.Header}>
-                        <Image style = {styles.Banner} source = {{uri : 'https://avvesione.files.wordpress.com/2015/12/death_parade-07-quin-nona-ginti-decim-quindecim-alcohol-drinks-cheers-raising_glasses-bar.jpg'}}/>
-                        <Text style = {{fontSize : 20}} >Join the Hubbers</Text>
-                    </View>
+                        <Text style = {{fontSize : 20}} >Register</Text>
+                    
                     <Form style={styles.Form}>
                         <Label style = {styles.Label}>Email</Label>
                         <View style = {{flexDirection : 'row',borderWidth : 2, marginHorizontal : 40,marginVertical : 10}}>
@@ -98,13 +96,12 @@ class Register extends Component{
                         </View>
                         <Button success block rounded style = {styles.Button} onPress = {()=>this.registerChecker()}><Text>Register</Text></Button>
                         <View style={{alignItems:'center'}}>
-                        <Text>Already have an account?</Text>
                         <Text onPress={()=>this.props.navigation.navigate('Login')} style = {styles.Text}>Log In</Text>  
                         </View>
                     </Form> 
                 </ImageBackground>
 
-            </View>
+            </Container>
         )
     }
 }

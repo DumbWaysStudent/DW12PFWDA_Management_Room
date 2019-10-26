@@ -31,7 +31,6 @@ class Rooms extends Component{
       this.focusListener.remove();
     }
     async addRoom(){
-      console.log(this.props.loginLocal.login.token)
       await this.props.handleAddRoom({
         roomName:this.state.roomName,
         token:this.props.loginLocal.login.token

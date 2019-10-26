@@ -10,7 +10,6 @@ const {height, width } = Dimensions.get('window');
 class Loading extends Component{
     async componentDidMount(){
         setTimeout( async () => {
-          console.log(this.props.loginLocal.login.token)
           await this.props.handleGetRooms({
             token:this.props.loginLocal.login.token
           })

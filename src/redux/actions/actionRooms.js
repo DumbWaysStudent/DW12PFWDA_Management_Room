@@ -29,7 +29,7 @@ export const handleAddRoom = (params) => ({
 
 
 export const handleEditRoom = (params) => ({
-  type: types.ADD_ROOM,
+  type: types.EDIT_ROOM,
   payload: axios({
     method:'PUT',
     url:`http://192.168.43.24:9876/api/v1/room/${params.roomId}`,

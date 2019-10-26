@@ -12,7 +12,17 @@ export const handleLogin = (email,password) => ({
         }
     })
   });
-  
+  export const handleRegister = (email,password) => ({
+    type: types.REGISTER,
+    payload: axios({
+        method:'POST',
+        url:'http://192.168.43.24:9876/api/v1/register',
+        data:{
+            email,
+            password
+        }
+    })
+  });
 export const handleUpdateUser = (params) => ({
     type: types.UPDATE_USER,
     payload: axios({
