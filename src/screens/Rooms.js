@@ -1,38 +1,56 @@
 import React, {Component} from 'react'
-import {TouchableOpacity,View,Dimensions,ImageBackground,StyleSheet,AsyncStorage} from 'react-native'
-import {Text,Container,Button}from 'native-base'
-import {NavigationEvents, withNavigation} from 'react-navigation'
+import {TouchableOpacity,View,Dimensions,Alert,ImageBackground,StyleSheet,AsyncStorage,Modal,TouchableHighlight} from 'react-native'
+import {Text,Container,Button,Label,Input}from 'native-base'
+import {withNavigation} from 'react-navigation'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { FlatGrid } from 'react-native-super-grid';
-import * as actionAccount from '../redux/actions/actionAccount'
+import * as actionRooms from '../redux/actions/actionRooms'
 import { connect } from 'react-redux'
 
-const items = [
-  { name: 'TURQUOISE', code: '#1abc9c' }, { name: 'EMERALD', code: '#2ecc71' },
-  { name: 'PETER RIVER', code: '#3498db' }, { name: 'AMETHYST', code: '#9b59b6' },
-  { name: 'WET ASPHALT', code: '#34495e' }, { name: 'GREEN SEA', code: '#16a085' },
-  { name: 'NEPHRITIS', code: '#27ae60' }, { name: 'BELIZE HOLE', code: '#2980b9' },
-  { name: 'WISTERIA', code: '#8e44ad' }, { name: 'MIDNIGHT BLUE', code: '#2c3e50' },
-  { name: 'SUN FLOWER', code: '#f1c40f' }, { name: 'CARROT', code: '#e67e22' },
-  { name: 'ALIZARIN', code: '#e74c3c' }, { name: 'CLOUDS', code: '#ecf0f1' },
-  { name: 'CONCRETE', code: '#95a5a6' }, { name: 'ORANGE', code: '#f39c12' },
-  { name: 'PUMPKIN', code: '#d35400' }, { name: 'POMEGRANATE', code: '#c0392b' },
-  { name: 'SILVER', code: '#bdc3c7' }, { name: 'ASBESTOS', code: '#7f8c8d' },
-];
+
 const {height, width } = Dimensions.get('window');
 class Rooms extends Component{
     constructor(props){
         super(props)
         this.state = {
-            position : 0,
-            interval : null,
-            starId:[-1],
+            modalVisible: false,
+            roomName:''
         }
+    }
+    setModalVisible(visible) {
+      this.setState({modalVisible: visible});
+    }
+    componentDidMount(){
+      const {navigation}=this.props
+      this.focusListener = navigation.addListener('didFocus', () => {
+        this.setState(this.state)
+      });
+    }
+    componentWillUnmount() {
+      // Remove the event listener
+      this.focusListener.remove();
+    }
+    async addRoom(){
+      console.log(this.props.loginLocal.login.token)
+      await this.props.handleAddRoom({
+        roomName:this.state.roomName,
+        token:this.props.loginLocal.login.token
+      })
+      await this.props.handleGetRooms({
+        token:this.props.loginLocal.login.token
+      })
+      this.setState(this.state)
+      Alert.alert(
+        'Add Room Success',
+        `by : ${this.props.loginLocal.login.email}`,
+        [
+            {text: 'Yay', onPress: () =>this.setModalVisible(!this.state.modalVisible)},
+        ],
+        {cancelable: false},
+        )
     }
     render(){
       const {rooms} = this.props.roomsLocal
-      console.log(this.props.roomsLocal.rooms)
-      console.log(items.code)
       return (
         <Container>
           <FlatGrid
@@ -43,16 +61,59 @@ class Rooms extends Component{
           // fixed
           // spacing={20}
           renderItem={({ item, index }) => (
-            
-            <View style={[styles.itemContainer, { backgroundColor: 'grey' }]}>
+            <TouchableOpacity onPress={()=>this.props.navigation.navigate('EditRoom',{
+              id:item.id,
+              name:item.name
+            })}>
+              <View style={[styles.itemContainer, { backgroundColor: 'grey' }]}>
               <Text style={styles.itemName}>{item.name}</Text>
               <Text style={styles.itemCode}>{item.name}</Text>
             </View>
+            </TouchableOpacity>
+            
             
           )}
           
         />
-        <Button block><Text>Add</Text></Button>
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            this.setModalVisible(!this.state.modalVisible);
+          }}>
+          <View style={{marginTop: 22}}>
+            <View>
+              <Label>Room Name</Label>
+              <View style = {{flexDirection : 'row',borderWidth : 2, marginHorizontal : 40,marginVertical : 10}}>
+                  <Input onChangeText = {(e)=>this.setState({roomName : e})}/>
+              </View>
+              <View style = {{flexDirection:'row',justifyContent:'center'}}>
+              <Button transparent block
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}>
+                <Text>Cancel</Text>
+              </Button>
+              <Button transparent block
+                onPress={() => {
+                  this.addRoom()
+                }}>
+                <Text>Add</Text>
+              </Button>
+              </View>
+
+            </View>
+          </View>
+        </Modal>
+
+        <Button block
+          onPress={() => {
+            this.setModalVisible(true);
+          }}>
+          <Text>Add</Text>
+        </Button>
+     
         </Container>
         
         
@@ -70,9 +131,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    handleAddFavorite: (params) => dispatch(actionAccount.handleAddFavorite(params)),
-    handleDeleteFavorite: (params) => dispatch(actionAccount.handleDeleteFavorite(params)),
-
+    handleAddRoom: (params) => dispatch(actionRooms.handleAddRoom(params)),
+    handleGetRooms: (params) => dispatch(actionRooms.handleGetRooms(params))      
   }
 }
 

@@ -22,13 +22,11 @@ class Profile extends Component{
         }
     }
     async componentDidMount(){
-        this.setState({isRefresh:1})
-        const token= await AsyncStorage.getItem('token')
-        if(!token) this.props.navigation.navigate('Account')
     }
     onSharePress = () => Share.share(shareOptions);
     render(){
         const{login}=this.props.loginLocal
+        console.log(login.image)
         const name = this.props.navigation.getParam('name')
         const image = this.props.navigation.getParam('image')
         return(
@@ -37,26 +35,18 @@ class Profile extends Component{
                 <HeaderMain title = 'My Profile'/>
                   <View>
                     <TouchableOpacity  onPress = {()=>this.props.navigation.navigate('EditProfile',{title : 'Edit Profile',
-                    name:!name? login.name:name,
+                    name:!name? login.email:name,
                     image:!image? login.image:image
                     })}>
                         <Body>
                         <Image source = {{uri:!image ? login.image : image}} style={styles.profilePic} ></Image>
                             <Text>
-                            {!name ? login.name : name}
+                            {!name ? login.email : name}
                             </Text>
                         </Body>
                     </TouchableOpacity>
                     <View>
-                        <ListItem noIndent onPress = {()=>this.props.navigation.navigate('Creation',{title : 'My Webtoon Creation'})}>
-                            <Left>
-                                <Text>My Webtoon Creation</Text>
-                            </Left>
-                            <Right>
-                                <Icon name = "arrow-right"/>
-                            </Right>
-                        </ListItem>
-                        <ListItem noIndent onPress = {()=>this.props.navigation.navigate('Login')}>
+                        <ListItem noIndent onPress = {()=>this.props.navigation.navigate('Account')}>
                             <Left>
                                 <Text>Log Out</Text>
                             </Left>

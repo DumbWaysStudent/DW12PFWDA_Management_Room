@@ -28,9 +28,6 @@ const HeaderEdit = (props) => {
         <Text>{props.title}</Text>
       </Body>
       <Right>
-        <Button transparent>
-          <Icon  size = {25}name='check' color = 'orange' />
-        </Button>
       </Right>
   </Header>)
 }

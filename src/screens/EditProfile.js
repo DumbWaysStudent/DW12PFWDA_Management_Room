@@ -22,15 +22,12 @@ class EditProfile extends Component {
     async componentDidMount(){ 
          
         this.setState({newProfileName:this.props.navigation.getParam('name')})
-        const token= await AsyncStorage.getItem('token')
-        if(!token) this.props.navigation.navigate('Account')
     }
 
     async updateProfile(){
         if(this.state.imageUrl=='' ) this.setState({imageUrl:this.props.loginLocal.login.image})
-        const token= await AsyncStorage.getItem('token')
         await this.props.handleUpdateUser({
-            token:String('Bearer '+token),
+            token:String('Bearer '+this.props.loginLocal.login.token),
             id:this.props.loginLocal.login.id,
             newProfileName:this.state.newProfileName,
             newProfilePic:this.state.imageUrl

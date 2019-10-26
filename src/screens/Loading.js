@@ -16,8 +16,6 @@ class Loading extends Component{
           })
           this.props.navigation.navigate('Home')
         }, 0);
-        
-
     }
     render(){
         return(
