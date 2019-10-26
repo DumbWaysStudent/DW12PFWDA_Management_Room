@@ -64,7 +64,7 @@ class Rooms extends Component{
               id:item.id,
               name:item.name
             })}>
-              <View style={[styles.itemContainer, { backgroundColor: 'grey' }]}>
+              <View style={[styles.itemContainer, { backgroundColor: 'green' }]}>
               <Text style={styles.itemName}>{item.name}</Text>
               <Text style={styles.itemCode}>{item.name}</Text>
             </View>

@@ -29,3 +29,18 @@ export const handleAddCustomer = (params) => ({
     })
   });
 
+  export const handleEditCustomer = (params) => ({
+    type: types.EDIT_CUSTOMER,
+    payload: axios({
+      method:'PUT',
+      url:`http://192.168.43.24:9876/api/v1/customer/${params.id}`,
+      data:{
+        name : params.name,
+        identity_number:params.idNumber,
+        phone_number:params.phoneNumber
+    },
+    headers:{
+        Authorization:`Bearer ${params.token}`
+    }
+    })
+  });

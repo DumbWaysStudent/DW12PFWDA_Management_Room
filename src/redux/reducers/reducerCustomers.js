@@ -36,7 +36,22 @@ export default function reducerCustomers(state = initialState, action) {
         case `${types.ADD_CUSTOMER}_REJECTED`:
         return {
             ...state,
-        }  
+        } 
+        
+        case `${types.EDIT_CUSTOMER}_PENDING`:
+            return {
+                ...state,
+            };
+        
+            case `${types.EDIT_CUSTOMER}_FULFILLED`:
+            return {
+                ...state,
+            }
+        
+            case `${types.EDIT_CUSTOMER}_REJECTED`:
+            return {
+                ...state,
+            }
     default:
       return state;
   }

@@ -74,13 +74,19 @@ class Customers extends Component{
         {customers.length >0 ? customers.map((item,index)=>{
               return(
                 <List key = {index}>
-                  <ListItem thumbnail onPress = {()=>{this.props.navigation.navigate('Details',{id:item.id, title : item.webtoonData.title, banner : item.webtoonData.image})}}>
+                  <ListItem thumbnail onPress = {()=>this.props.navigation.navigate('EditCustomer',{
+                    id:item.id,
+                    name:item.name,
+                    idNumber:item.identity_number,
+                    phoneNumber:item.phone_number
+                  })}>
                       <Left>
                       <Thumbnail square source={{uri: 'https://vignette.wikia.nocookie.net/spongebob/images/f/f2/Oldbash.jpg/revision/latest?cb=20170724203516'}}/>
                       </Left>   
                       <Body>
                           <Text>{item.name}</Text>
-                          {/* <Text note numberOfLines={1}>{item.webtoonData.title}</Text> */}
+                          <Text note numberOfLines={1}>{item.identity_number}</Text>
+                          <Text note numberOfLines={2}>{item.phone_number}</Text>
                       </Body>
                   </ListItem>
                 </List>

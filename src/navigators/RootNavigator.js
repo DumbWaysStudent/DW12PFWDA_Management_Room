@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import Login from '../screens/Login'
-import Register from '../screens/Register'
 import Loading from '../screens/Loading'
 import EditRoom from '../screens/EditRoom'
 import EditProfile from '../screens/EditProfile'
 import Rooms from '../screens/Rooms'
+import EditCustomer from '../screens/EditCustomer'
 import Customers from '../screens/Customers'
 import Profile from '../screens/Profile'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -54,18 +54,14 @@ const HomeStack = createStackNavigator({
   BottomStack : {screen: BottomStack,navigationOptions : ()=>({header : null})},
   EditRoom : {screen : EditRoom, navigationOptions : ()=>({header : null})},
   EditProfile : {screen : EditProfile, navigationOptions : ()=>({header : null})},
+  EditCustomer : {screen : EditCustomer, navigationOptions : ()=>({header : null})},
 
 },{initialRouteName : 'BottomStack'}
-)
-const AccountStack = createStackNavigator({
-  Login : {screen : Login, navigationOptions : ()=>({header : null})},
-  Register : {screen : Register, navigationOptions : ()=>({header : null})}
-},{initialRouteName : 'Login'}
 )
 
 const RootNavigator = createSwitchNavigator({
   
-  Account : AccountStack,
+  Account : Login,
   Loading: Loading,
   Home: HomeStack,   
 })
