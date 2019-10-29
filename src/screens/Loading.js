@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {View,Dimensions,ImageBackground,StyleSheet,Image} from 'react-native'
 import {Text}from 'native-base'
 import * as actionRooms from '../redux/actions/actionRooms'
+import * as actionCustomers from '../redux/actions/actionCustomers'
 import { connect } from 'react-redux'
 
 
@@ -14,6 +15,9 @@ class Loading extends Component{
             token:this.props.loginLocal.login.token
           })
           await this.props.handleGetCheckIn({
+            token:this.props.loginLocal.login.token
+          })
+          await this.props.handleGetCustomers({
             token:this.props.loginLocal.login.token
           })
           this.props.navigation.navigate('Home')
@@ -55,7 +59,9 @@ const styles = StyleSheet.create({
   const mapDispatchToProps = dispatch => {
     return {
       handleGetRooms: (params) => dispatch(actionRooms.handleGetRooms(params)), 
-      handleGetCheckIn: (params) => dispatch(actionRooms.handleGetCheckIn(params))      
+      handleGetCheckIn: (params) => dispatch(actionRooms.handleGetCheckIn(params)),     
+      handleGetCustomers: (params) => dispatch(actionCustomers.handleGetCustomers(params)),
+
     }
   }
   

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Login from '../screens/Login'
 import Loading from '../screens/Loading'
-import EditRoom from '../screens/EditRoom'
 import EditProfile from '../screens/EditProfile'
 import Rooms from '../screens/Rooms'
 import EditCustomer from '../screens/EditCustomer'
@@ -24,11 +23,11 @@ const BottomStack = createBottomTabNavigator({
       const { routeName } = navigation.state;
       let iconName;
       if (routeName === 'Rooms') {
-        iconName = `home`;
+        iconName = `building`;
       } else if (routeName === 'Customers') {
-        iconName = `star`;
+        iconName = `users`;
       }
-      else iconName = `user`;
+      else iconName = `cog`;
 
       // You can return any component that you like here! We usually use an
       // icon component from react-native-vector-icons
@@ -52,7 +51,6 @@ const BottomStack = createBottomTabNavigator({
 
 const HomeStack = createStackNavigator({
   BottomStack : {screen: BottomStack,navigationOptions : ()=>({header : null})},
-  EditRoom : {screen : EditRoom, navigationOptions : ()=>({header : null})},
   EditProfile : {screen : EditProfile, navigationOptions : ()=>({header : null})},
   EditCustomer : {screen : EditCustomer, navigationOptions : ()=>({header : null})},
 

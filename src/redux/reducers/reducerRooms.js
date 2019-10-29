@@ -62,6 +62,7 @@ export default function reducerRooms(state = initialState, action) {
             case `${types.GET_CHECK_IN}_FULFILLED`:
             return {
                 ...state,
+                checkIn:action.payload.data
             };
       
             case `${types.GET_CHECK_IN}_REJECTED`:
