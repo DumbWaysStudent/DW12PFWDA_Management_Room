@@ -30,16 +30,15 @@ class Rooms extends Component {
   async componentDidMount() {
     const { navigation } = this.props
     this.focusListener = navigation.addListener('didFocus', async () => {
-      this.setState(this.state)
+      await this.ordersChecker()
     })
     await this.ordersChecker()
-    // while (this.state.timer.order_end_time<0) {
-    //   this.checkout
-    // }
+    this.interval = setInterval(async () => await this.ordersChecker() , 5000)
     await this.roomChecker()
   }
   componentWillUnmount() {
     // Remove the event listener
+    clearInterval(this.interval)
     this.focusListener.remove();
   }
   async ordersChecker() {
@@ -52,12 +51,16 @@ class Rooms extends Component {
       newQ.push({
         id:item.id,
         room_id:item.room_id,
-        order_end_time:moment(item.order_end_time).diff(moment(),'minutes')
+        order_end_time:moment(item.order_end_time).diff(moment(),'seconds')
       })
     })
     queues=newQ
     this.props.ordersLocal.queues=newQ
     await this.setState({timer:newQ[0]})
+    while (this.state.timer) {
+      if(this.state.timer.order_end_time<=0) await this.checkOut(this.state.timer.id)
+      else return 0
+    }
    }
   async roomChecker() {
     await this.props.handleGetRooms({
@@ -126,7 +129,7 @@ class Rooms extends Component {
       <View style={{ flexDirection: 'row', width: width * 0.7, borderWidth: 2, marginHorizontal: 90, marginBottom: 10 }}>
         <Input disabled={this.state.modal == 'checkIn' ? false : true} 
         backgroundColor={this.state.modal == 'checkIn' ? 'white' : 'grey'}
-        value={this.state.modal == 'checkIn' ? '' : this.state.duration.toString()+' mins'}
+        value={this.state.modal == 'checkIn' ? this.state.duration.toString() : this.state.duration.toString()+' mins'}
          onChangeText={(e) => this.setState({ duration: e })} />
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
@@ -186,7 +189,7 @@ class Rooms extends Component {
       'Check In Success',
       `by : ${this.props.loginLocal.login.email}, duration : ${this.state.duration} minutes`,
       [
-        { text: 'Yay', onPress: () => this.setState({ visibleModal: null, disabled: !this.state.disabled, duration: '' }) },
+        { text: 'Yay', onPress: () => this.setState({ visibleModal: null, disabled: !this.state.disabled, duration: '',orderId:'' }) },
       ],
       { cancelable: false }
     )
@@ -198,14 +201,16 @@ class Rooms extends Component {
       token: this.props.loginLocal.login.token
     })
     await this.ordersChecker()
-    Alert.alert(
-      'Check Out Success',
-      `by : ${this.props.loginLocal.login.email}`,
-      [
-        { text: 'Yay', onPress: () => this.setState({ visibleModal: null, disabled: !this.state.disabled, duration: '' }) },
-      ],
-      { cancelable: false }
-    )
+    if(this.state.orderId!==''){
+      Alert.alert(
+        'Check Out Success',
+        `by : ${this.props.loginLocal.login.email}`,
+        [
+          { text: 'Yay', onPress: () => this.setState({ visibleModal: null, disabled: !this.state.disabled, duration: '',orderId:'' }) },
+        ],
+        { cancelable: false }
+      )
+    }
   }
   async addRoom() {
     this.setState({ disabled: !this.state.disabled })
@@ -282,7 +287,7 @@ class Rooms extends Component {
                 <Text style={styles.itemName}>{item.name}</Text>
                 {queues.filter(e => e.room_id == item.id) == '' ? 
                 <Text style={styles.itemCaption}> Available</Text>
-                : <Text style={styles.itemCaption}>{queues[queues.findIndex(e=>e.room_id==item.id)].order_end_time} minutes left</Text>
+                : <Text style={styles.itemCaption}>{queues[queues.findIndex(e=>e.room_id==item.id)].order_end_time/60<1 ? queues[queues.findIndex(e=>e.room_id==item.id)].order_end_time +' seconds left' : Math.floor(queues[queues.findIndex(e=>e.room_id==item.id)].order_end_time/60)+' minutes left'}</Text>
                 }
               </View>
             </TouchableOpacity>
