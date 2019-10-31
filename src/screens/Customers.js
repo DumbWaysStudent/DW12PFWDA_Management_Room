@@ -143,7 +143,6 @@ class Customers extends Component{
   }
   render(){
     const {customers}=this.props.customersLocal
-    console.log(this.props.customersLocal)
     return(
       <Container>
       <HeaderMain title = 'Customers'/>
@@ -188,7 +187,12 @@ class Customers extends Component{
           }         
         </Content>
 
-        <Fab onPress = {()=> this.setState({visibleModal: 'swipeable',modal:'add'})}
+        <Fab onPress = {()=> this.setState({
+            visibleModal: 'swipeable',
+            modal:'add',           
+            name:'',
+            idNumber:'',
+            phoneNumber:''})}
           style={{ backgroundColor: '#5067FF' }}
           position="bottomRight">            
           <Icon name="plus" />

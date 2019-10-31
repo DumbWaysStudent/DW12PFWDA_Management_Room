@@ -1,12 +1,13 @@
 import * as types from './../types'
 import axios from 'axios'
+import {url} from '../url'
 
 
 export const handleGetRooms = (params) => ({
   type: types.GET_ROOMS,
   payload: axios({
     method:'GET',
-    url:'http://192.168.43.24:9876/api/v1/rooms',
+    url:`${url}/rooms`,
     headers:{
       Authorization:`Bearer ${params.token}`
   }
@@ -17,7 +18,7 @@ export const handleAddRoom = (params) => ({
   type: types.ADD_ROOM,
   payload: axios({
     method:'POST',
-    url:'http://192.168.43.24:9876/api/v1/room',
+    url:`${url}/room`,
     data:{
       name : params.roomName,
   },
@@ -32,7 +33,7 @@ export const handleEditRoom = (params) => ({
   type: types.EDIT_ROOM,
   payload: axios({
     method:'PUT',
-    url:`http://192.168.43.24:9876/api/v1/room/${params.roomId}`,
+    url:`${url}/room/${params.roomId}`,
     data:{
       name : params.roomName,
   },
@@ -42,13 +43,4 @@ export const handleEditRoom = (params) => ({
   })
 });
 
-export const handleGetCheckIn = (params) => ({
-  type: types.GET_CHECK_IN,
-  payload: axios({
-    method:'GET',
-    url:`http://192.168.43.24:9876/api/v1/checkin`,
-  headers:{
-      Authorization:`Bearer ${params.token}`
-  }
-  })
-});
+

@@ -26,7 +26,6 @@ class Profile extends Component{
     onSharePress = () => Share.share(shareOptions);
     render(){
         const{login}=this.props.loginLocal
-        console.log(login.image)
         const name = this.props.navigation.getParam('name')
         const image = this.props.navigation.getParam('image')
         return(

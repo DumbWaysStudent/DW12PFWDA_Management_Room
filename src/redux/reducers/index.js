@@ -4,18 +4,18 @@ import { createNavigationReducer } from 'react-navigation-redux-helpers';
 
 import RootNavigator from '../../navigators/RootNavigator'
 import reducerRooms from './reducerRooms';
-import reducerLogin from './reducerLogin';
+import reducerAccount from './reducerAccount';
 import reducerGetCustomers from './reducerCustomers';
-import reducerGetCheckIn from './reducerRooms';
+import reducerGetOrders from './reducerOrders';
 
 const reducerRouter = createNavigationReducer(RootNavigator);
 
 const appReducer = combineReducers({
   router:reducerRouter,
-  login: reducerLogin,
+  login: reducerAccount,
   rooms:reducerRooms,
   customers:reducerGetCustomers,
-  checkIn:reducerGetCheckIn
+  orders:reducerGetOrders
 })
 
 export default appReducer

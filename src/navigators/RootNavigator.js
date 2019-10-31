@@ -58,9 +58,8 @@ const HomeStack = createStackNavigator({
 )
 
 const RootNavigator = createSwitchNavigator({
-  
-  Account : Login,
   Loading: Loading,
+  Account : Login,
   Home: HomeStack,   
 })
 

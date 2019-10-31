@@ -40,7 +40,7 @@ class Login extends Component{
                 if(regexResult==email){
                     await this.props.handleLogin(email,password)
                     if(this.props.loginLocal.login.token){
-                        await AsyncStorage.setItem("token",this.props.loginLocal.login.token)
+                        await AsyncStorage.setItem("data",JSON.stringify(this.props.loginLocal.login))
                         Alert.alert(
                             'Login Success',
                             `Happy Dutying, ${this.props.loginLocal.login.email}`,

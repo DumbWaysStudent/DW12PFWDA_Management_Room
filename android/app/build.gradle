@@ -187,6 +187,7 @@ dependencies {
 
     // For WebP support, without animations
     implementation 'com.facebook.fresco:webpsupport:2.0.0'
+    
     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
     implementation fileTree(dir: "libs", include: ["*.jar"])
