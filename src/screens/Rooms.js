@@ -79,7 +79,7 @@ class Rooms extends Component {
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         <Button danger style={{ marginHorizontal: 10 }}
-          onPress={() => this.setState({ visibleModal: null })}>
+          onPress={() => this.setState({ visibleModal: null ,disabled:!this.state.disabled})}>
           <Text>Cancel</Text>
         </Button>
         {this.state.modal == 'add' ?
@@ -134,7 +134,7 @@ class Rooms extends Component {
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         <Button danger style={styles.Button}
-          onPress={() => this.setState({ visibleModal: null, roomName: '' })}>
+          onPress={() => this.setState({ visibleModal: null, roomName: '',disabled:!this.state.disabled,duration:'' })}>
           <Text>Cancel</Text>
         </Button>
         {this.state.modal == 'checkIn' ?
@@ -223,7 +223,7 @@ class Rooms extends Component {
       'Add Room Success',
       `by : ${this.props.loginLocal.login.email}`,
       [
-        { text: 'Yay', onPress: () => this.setState({ visibleModal: null, disabled: !this.state.disabled }) },
+        { text: 'Yay', onPress: () => this.setState({ visibleModal: null, disabled: !this.state.disabled,duration:'' }) },
       ],
       { cancelable: false },
     )
@@ -238,7 +238,7 @@ class Rooms extends Component {
           backdropColor="#B4B3DB"
           animationInTiming={500}
           animationOutTiming={500}
-          onSwipeComplete={() => this.setState({ visibleModal: null })}
+          onSwipeComplete={() => this.setState({ visibleModal: null ,disabled:!this.state.disabled,duration:''})}
           swipeDirection={['up', 'left', 'right', 'down']}>
           {this.state.modal == 'add' || this.state.modal == 'edit' ?
             this.renderRoomModal()
