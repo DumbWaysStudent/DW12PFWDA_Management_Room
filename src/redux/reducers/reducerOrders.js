@@ -40,7 +40,7 @@ export default function reducerOrders(state = initialState, action) {
       case `${types.GET_QUEUES}_FULFILLED`:
           let unique = [];
           action.payload.data.forEach(item => {
-            if(unique.filter(e=>e.room_id ==item.room_id)==''){
+            if(unique.filter(e=>e.table_id ==item.table_id)==''){
               unique.push(item)
             }
           })

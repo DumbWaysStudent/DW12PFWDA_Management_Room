@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import Login from '../screens/Login'
 import Loading from '../screens/Loading'
 import EditProfile from '../screens/EditProfile'
-import Rooms from '../screens/Rooms'
+import Tables from '../screens/Tables'
+import Orders from '../screens/Orders'
 import EditCustomer from '../screens/EditCustomer'
 import Customers from '../screens/Customers'
 import Profile from '../screens/Profile'
@@ -13,7 +14,8 @@ import {createBottomTabNavigator} from 'react-navigation-tabs'
 
 
 const BottomStack = createBottomTabNavigator({
-  Rooms: Rooms,
+  Tables: Tables,
+  Orders: Orders,
   Customers: Customers,
   Profile: Profile
 },
@@ -22,9 +24,13 @@ const BottomStack = createBottomTabNavigator({
     tabBarIcon: ({ tintColor }) => {
       const { routeName } = navigation.state;
       let iconName;
-      if (routeName === 'Rooms') {
+      if (routeName === 'Tables') {
         iconName = `building`;
-      } else if (routeName === 'Customers') {
+      } 
+      else if (routeName === 'Orders') {
+        iconName = `users`;
+      }
+      else if (routeName === 'Customers') {
         iconName = `users`;
       }
       else iconName = `cog`;

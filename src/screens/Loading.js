@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {View,Dimensions,ImageBackground,StyleSheet,Image,AsyncStorage} from 'react-native'
 import {Text}from 'native-base'
-import * as actionRooms from '../redux/actions/actionRooms'
+import * as actionTables from '../redux/actions/actionTables'
 import * as actionAccount from '../redux/actions/actionAccount'
 import * as actionCustomers from '../redux/actions/actionCustomers'
 import * as actionOrders from '../redux/actions/actionOrders'
@@ -20,7 +20,7 @@ class Loading extends Component{
         else{
           setTimeout(async () => {
           await this.props.handleStoreData(data)
-          await this.props.handleGetRooms({
+          await this.props.handleGetTables({
             token:this.props.loginLocal.login.token
           })
           await this.props.handleGetOrders({
@@ -29,9 +29,9 @@ class Loading extends Component{
           await this.props.handleGetCustomers({
             token:this.props.loginLocal.login.token
           })
-          await this.props.handleGetQueues({
-            token:this.props.loginLocal.login.token
-          })
+          // await this.props.handleGetQueues({
+          //   token:this.props.loginLocal.login.token
+          // })
           this.props.navigation.navigate('Home')
           }, 0);
           
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   
   const mapDispatchToProps = dispatch => {
     return {
-      handleGetRooms: (params) => dispatch(actionRooms.handleGetRooms(params)), 
+      handleGetTables: (params) => dispatch(actionTables.handleGetTables(params)), 
       handleGetOrders: (params) => dispatch(actionOrders.handleGetOrders(params)),     
       handleGetCustomers: (params) => dispatch(actionCustomers.handleGetCustomers(params)),
       handleStoreData: (params) => dispatch(actionAccount.handleStoreData(params)),

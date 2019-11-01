@@ -8,10 +8,10 @@ export const GET_CUSTOMERS = 'GET_CUSTOMERS'
 export const ADD_CUSTOMER = 'ADD_CUSTOMER'
 export const EDIT_CUSTOMER = 'EDIT_CUSTOMER'
 
-//ROOMS
-export const GET_ROOMS = 'GET_ROOMS'
-export const ADD_ROOM = 'ADD_ROOM'
-export const EDIT_ROOM = 'EDIT_ROOM'
+//TABLES
+export const GET_TABLES = 'GET_TABLES'
+export const ADD_TABLE = 'ADD_TABLE'
+export const EDIT_TABLE = 'EDIT_TABLE'
 
 //ORDERS
 export const GET_ORDERS = 'GET_ORDERS'

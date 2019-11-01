@@ -5,22 +5,22 @@ import Modal from 'react-native-modal'
 import { withNavigation } from 'react-navigation'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { FlatGrid } from 'react-native-super-grid';
-import * as actionRooms from '../redux/actions/actionRooms'
+import * as actionTables from '../redux/actions/actionTables'
 import * as actionOrders from '../redux/actions/actionOrders'
 import { connect } from 'react-redux'
 import moment from 'moment'
 
 const { height, width } = Dimensions.get('window');
 
-class Rooms extends Component {
+class Tables extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      roomId: '',
+      tableId: '',
       orderId:'',
       customerId: 1,
       modal: '',
-      roomName: '',
+      tableName: '',
       duration: '',
       disabled: false,
       queues:'',
@@ -34,7 +34,7 @@ class Rooms extends Component {
     })
     await this.ordersChecker()
     this.interval = setInterval(async () => await this.ordersChecker() , 5000)
-    await this.roomChecker()
+    await this.tableChecker()
   }
   componentWillUnmount() {
     // Remove the event listener
@@ -50,11 +50,10 @@ class Rooms extends Component {
     queues.forEach(item => {
       newQ.push({
         id:item.id,
-        room_id:item.room_id,
+        table_id:item.table_id,
         order_end_time:moment(item.order_end_time).diff(moment(),'seconds')
       })
     })
-    queues=newQ
     this.props.ordersLocal.queues=newQ
     await this.setState({timer:newQ[0]})
     while (this.state.timer) {
@@ -62,8 +61,8 @@ class Rooms extends Component {
       else return 0
     }
    }
-  async roomChecker() {
-    await this.props.handleGetRooms({
+  async tableChecker() {
+    await this.props.handleGetTables({
       token: this.props.loginLocal.login.token
     })
     this.setState(this.state)
@@ -71,11 +70,11 @@ class Rooms extends Component {
   timer(){
 
   }
-  renderRoomModal = () => (
+  renderTableModal = () => (
     <View style={styles.content}>
-      <Label style={styles.contentTitle}>Room Name</Label>
+      <Label style={styles.contentTitle}>Table Name</Label>
       <View style={{ flexDirection: 'row', borderWidth: 2, marginHorizontal: 40, marginVertical: 10 }}>
-        <Input value={this.state.roomName} onChangeText={(e) => this.setState({ roomName: e })} />
+        <Input value={this.state.tableName} onChangeText={(e) => this.setState({ tableName: e })} />
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         <Button danger style={{ marginHorizontal: 10 }}
@@ -85,14 +84,14 @@ class Rooms extends Component {
         {this.state.modal == 'add' ?
           <Button disabled={this.state.disabled} success style={{ marginHorizontal: 10 }}
             onPress={() => {
-              this.addRoom()
+              this.addTable()
             }}>
             <Text>Add</Text>
           </Button>
           :
           <Button disabled={this.state.disabled} warning style={{ marginHorizontal: 10 }}
             onPress={() => {
-              this.editRoom()
+              this.editTable()
             }}>
             <Text>Edit</Text>
           </Button>
@@ -103,11 +102,11 @@ class Rooms extends Component {
 
   renderCheck = () => (
     <View style={styles.content}>
-      <Label style={styles.contentTitle}>Room Name</Label>
+      <Label style={styles.contentTitle}>Table Name</Label>
       <View style={{ flexDirection: 'row', borderWidth: 2, width: width * 0.7, marginHorizontal: 90 }}>
         <Input
         backgroundColor={this.state.modal == 'checkIn' ? 'white' : 'grey'}
-        disabled={true} value={this.state.roomName} onChangeText={(e) => this.setState({ roomName: e })} />
+        disabled={true} value={this.state.tableName} onChangeText={(e) => this.setState({ tableName: e })} />
       </View>
       <Label style={styles.contentTitle}>Customer</Label>
       <View
@@ -134,7 +133,7 @@ class Rooms extends Component {
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         <Button danger style={styles.Button}
-          onPress={() => this.setState({ visibleModal: null, roomName: '',disabled:!this.state.disabled,duration:'' })}>
+          onPress={() => this.setState({ visibleModal: null, tableName: '',disabled:!this.state.disabled,duration:'' })}>
           <Text>Cancel</Text>
         </Button>
         {this.state.modal == 'checkIn' ?
@@ -158,28 +157,28 @@ class Rooms extends Component {
     </View>
   )
 
-  async editRoom() {
+  async editTable() {
     this.setState({ disabled: !this.state.disabled })
-    await this.props.handleEditRoom({
-      roomId: this.state.roomId,
-      roomName: this.state.roomName,
+    await this.props.handleEditTable({
+      tableId: this.state.tableId,
+      tableName: this.state.tableName,
       token: this.props.loginLocal.login.token
     })
-    this.roomChecker()
+    this.tableChecker()
     Alert.alert(
-      'Edit Room Success',
+      'Edit Table Success',
       `by : ${this.props.loginLocal.login.email}`,
       [
-        { text: 'Ok', onPress: () => this.setState({ visibleModal: null, disabled: !this.state.disabled, roomName: '' }) },
+        { text: 'Ok', onPress: () => this.setState({ visibleModal: null, disabled: !this.state.disabled, tableName: '' }) },
       ],
       { cancelable: false },
     )
   }
   async checkIn() {
-    const { roomId, customerId, duration } = this.state
+    const { tableId, customerId, duration } = this.state
     this.setState({ disabled: !this.state.disabled })
     await this.props.handleCheckIn({
-      roomId,
+      tableId,
       customerId,
       duration,
       token: this.props.loginLocal.login.token
@@ -212,15 +211,15 @@ class Rooms extends Component {
       )
     }
   }
-  async addRoom() {
+  async addTable() {
     this.setState({ disabled: !this.state.disabled })
-    await this.props.handleAddRoom({
-      roomName: this.state.roomName,
+    await this.props.handleAddTable({
+      tableName: this.state.tableName,
       token: this.props.loginLocal.login.token
     })
-    this.roomChecker()
+    this.tableChecker()
     Alert.alert(
-      'Add Room Success',
+      'Add Table Success',
       `by : ${this.props.loginLocal.login.email}`,
       [
         { text: 'Yay', onPress: () => this.setState({ visibleModal: null, disabled: !this.state.disabled,duration:'' }) },
@@ -229,7 +228,8 @@ class Rooms extends Component {
     )
   }
   render() {
-    const { rooms } = this.props.roomsLocal
+    const { tables } = this.props.tablesLocal
+    console.log(this.props.tablesLocal)
     let {queues} = this.props.ordersLocal
     return (
       <Container>
@@ -241,33 +241,33 @@ class Rooms extends Component {
           onSwipeComplete={() => this.setState({ visibleModal: null ,disabled:!this.state.disabled,duration:''})}
           swipeDirection={['up', 'left', 'right', 'down']}>
           {this.state.modal == 'add' || this.state.modal == 'edit' ?
-            this.renderRoomModal()
+            this.renderTableModal()
             :
             this.renderCheck()
           }
         </Modal>
         <FlatGrid
           itemDimension={width * 0.2}
-          items={rooms}
+          items={tables}
           style={styles.gridView}
           renderItem={({ item, index }) => (
             <TouchableOpacity key={index}
               onPress={() =>
-                queues.filter(e => e.room_id == item.id) == '' ?
+                queues.filter(e => e.table_id == item.id) == '' ?
                   this.setState({
                     visibleModal: 'swipeable',
-                    roomName: item.name,
+                    tableName: item.name,
                     modal: 'checkIn',
-                    roomId: item.id
+                    tableId: item.id
                   })
                   :
                   this.setState({
                     visibleModal: 'swipeable',
-                    roomName: item.name,
+                    tableName: item.name,
                     modal: 'checkOut',
-                    roomId: item.id,
-                    duration:queues[queues.findIndex(e=>e.room_id==item.id)].order_end_time,
-                    orderId:queues[queues.findIndex(e=>e.room_id==item.id)].id
+                    tableId: item.id,
+                    duration:queues[queues.findIndex(e=>e.table_id==item.id)].order_end_time,
+                    orderId:queues[queues.findIndex(e=>e.table_id==item.id)].id
                   })
               }
               delayLongPress={400}
@@ -275,25 +275,25 @@ class Rooms extends Component {
                 this.setState({
                   visibleModal: 'swipeable',
                   modal: 'edit',
-                  roomName: item.name,
-                  roomId: item.id
+                  tableName: item.name,
+                  tableId: item.id
                 })
               }
             >
               <View style={[styles.itemContainer, {
                 backgroundColor:
-                  queues.filter(e => e.room_id == item.id) == '' ? 'grey' : 'green'
+                  queues.filter(e => e.table_id == item.id) == '' ? 'grey' : 'green'
               }]}>
                 <Text style={styles.itemName}>{item.name}</Text>
-                {queues.filter(e => e.room_id == item.id) == '' ? 
+                {queues.filter(e => e.table_id == item.id) == '' ? 
                 <Text style={styles.itemCaption}> Available</Text>
-                : <Text style={styles.itemCaption}>{queues[queues.findIndex(e=>e.room_id==item.id)].order_end_time/60<1 ? queues[queues.findIndex(e=>e.room_id==item.id)].order_end_time +' seconds left' : Math.floor(queues[queues.findIndex(e=>e.room_id==item.id)].order_end_time/60)+' minutes left'}</Text>
+                : <Text style={styles.itemCaption}>{queues[queues.findIndex(e=>e.table_id==item.id)].order_end_time/60<1 ? queues[queues.findIndex(e=>e.table_id==item.id)].order_end_time +' seconds left' : Math.floor(queues[queues.findIndex(e=>e.table_id==item.id)].order_end_time/60)+' minutes left'}</Text>
                 }
               </View>
             </TouchableOpacity>
           )}
         />
-        <Fab onPress={() => this.setState({ visibleModal: 'swipeable', modal: 'add',roomName:'' })}
+        <Fab onPress={() => this.setState({ visibleModal: 'swipeable', modal: 'add',tableName:'' })}
           style={{ backgroundColor: '#5067FF' }}
           position="bottomRight">
           <Icon name="plus" />
@@ -307,7 +307,7 @@ const mapStateToProps = state => {
   return {
     loginLocal: state.login,
     ordersLocal: state.orders,
-    roomsLocal: state.rooms,
+    tablesLocal: state.tables,
     customersLocal: state.customers
   }
 }
@@ -316,17 +316,17 @@ const mapDispatchToProps = dispatch => {
   return {
     handleCheckIn: (params) => dispatch(actionOrders.handleCheckIn(params)),
     handleCheckOut: (params) => dispatch(actionOrders.handleCheckOut(params)),
-    handleAddRoom: (params) => dispatch(actionRooms.handleAddRoom(params)),
-    handleGetRooms: (params) => dispatch(actionRooms.handleGetRooms(params)),
+    handleAddTable: (params) => dispatch(actionTables.handleAddTable(params)),
+    handleGetTables: (params) => dispatch(actionTables.handleGetTables(params)),
     handleGetQueues: (params) => dispatch(actionOrders.handleGetQueues(params)),
-    handleEditRoom: (params) => dispatch(actionRooms.handleEditRoom(params))
+    handleEditTable: (params) => dispatch(actionTables.handleEditTable(params))
   }
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withNavigation(Rooms));
+)(withNavigation(Tables));
 
 const styles = StyleSheet.create({
   gridView: {

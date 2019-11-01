@@ -1,26 +1,26 @@
-import * as types from './../types'
+import * as types from '../types'
 import axios from 'axios'
 import {url} from '../url'
 
 
-export const handleGetRooms = (params) => ({
-  type: types.GET_ROOMS,
+export const handleGetTables= (params) => ({
+  type: types.GET_TABLES,
   payload: axios({
     method:'GET',
-    url:`${url}/rooms`,
+    url:`${url}/tables`,
     headers:{
       Authorization:`Bearer ${params.token}`
   }
   })
 });
 
-export const handleAddRoom = (params) => ({
-  type: types.ADD_ROOM,
+export const handleAddTable =(params) => ({
+  type: types.ADD_TABLE,
   payload: axios({
     method:'POST',
-    url:`${url}/room`,
+    url:`${url}/table`,
     data:{
-      name : params.roomName,
+      name : params.tableName,
   },
   headers:{
       Authorization:`Bearer ${params.token}`
@@ -29,13 +29,13 @@ export const handleAddRoom = (params) => ({
 });
 
 
-export const handleEditRoom = (params) => ({
-  type: types.EDIT_ROOM,
+export const handleEditTable= (params) => ({
+  type: types.EDIT_TABLE,
   payload: axios({
     method:'PUT',
-    url:`${url}/room/${params.roomId}`,
+    url:`${url}/TABLE/${params.tableId}`,
     data:{
-      name : params.roomName,
+      name : params.tableName,
   },
   headers:{
       Authorization:`Bearer ${params.token}`
