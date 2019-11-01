@@ -6,7 +6,7 @@ import {withNavigation} from 'react-navigation'
 import Modal from 'react-native-modal'
 import HeaderMain from '../components/Headers/HeaderMain'
 import { connect } from 'react-redux'
-import * as actionCustomers from '../redux/actions/actionCustomers'
+import * as actionOrders from '../redux/actions/actionOrders'
 
 
 
@@ -16,26 +16,13 @@ class Orders extends Component{
   constructor(){
     super()
     this.state = {
-      customerId:'',
-      modal:'',
-      name:'',
-      idNumber:'',
-      phoneNumber:'',
-      modalVisible: false,
-      disabled:false,
-
     }
-  }
-  setModalVisible(visible) {
-    this.setState({modalVisible: visible});
   }
 
    async componentDidMount(){  
-    // const token= await AsyncStorage.getItem('token')
-    // if(!token) this.props.navigation.navigate('Account')
     const { navigation } = this.props;
     this.focusListener = navigation.addListener('didFocus', () => {
-        this.props.handleGetCustomers({
+        this.props.handleGetOrders({
             token:this.props.loginLocal.login.token
         })
       this.setState(this.state)
@@ -46,115 +33,15 @@ class Orders extends Component{
     // Remove the event listener
     this.focusListener.remove();
   }
-
-  renderModal = () => (
-    <View style={styles.content}>
-      <Label>Name</Label>
-      <View style = {{flexDirection : 'row',borderWidth : 2, marginHorizontal : 40,marginVertical : 10}}>
-          <Input value={this.state.name} onChangeText = {(e)=>this.setState({name : e})}/>
-      </View>
-      <Label>ID Number</Label>
-      <View style = {{flexDirection : 'row',borderWidth : 2, marginHorizontal : 40,marginVertical : 10}}>
-          <Input value={this.state.idNumber} onChangeText = {(e)=>this.setState({idNumber : e})}/>
-      </View>
-      <Label>Phone Number</Label>
-      <View style = {{flexDirection : 'row',borderWidth : 2, marginHorizontal : 40,marginVertical : 10}}>
-          <Input value={this.state.phoneNumber} onChangeText = {(e)=>this.setState({phoneNumber : e})}/>
-      </View>
-      <View style = {{flexDirection:'row',justifyContent:'center'}}>
-      <Button danger style={{marginHorizontal:10}}
-        onPress={() => this.setState({visibleModal: null})}>
-      <Text>Cancel</Text>
-      </Button>
-      {this.state.modal=='add'?
-        <Button disabled={this.state.disabled} success style={{marginHorizontal:10}}
-        onPress={() => {
-          this.addCustomer()
-        }}>
-        <Text>Add</Text>
-        </Button>
-        :
-        <Button disabled={this.state.disabled} warning style={{marginHorizontal:10}}
-        onPress={() => {
-          this.editCustomer()
-        }}>
-        <Text>Edit</Text>
-        </Button>
-    }
-      </View>
-    </View>
-  )
-
-  async addCustomer(){
-    this.setState({disabled:!this.state.disabled})
-    await this.props.handleAddCustomer({
-      name:this.state.name,
-      idNumber:this.state.idNumber,
-      phoneNumber:this.state.phoneNumber,
-      token:this.props.loginLocal.login.token
-    })
-    await this.props.handleGetCustomers({
-      token:this.props.loginLocal.login.token
-    })
-    this.setState(this.state)
-    Alert.alert(
-      'Add Customer Success',
-      `by : ${this.props.loginLocal.login.email}`,
-      [
-          {text: 'Yay', onPress: () => this.setState({
-            visibleModal: null,
-            disabled:!this.state.disabled,
-            name:'',
-            idNumber:'',
-            phoneNumber:''
-          })},
-      ],
-      {cancelable: false},
-      )
-  }
-
-  async editCustomer(){
-    this.setState({disabled:!this.state.disabled})
-    await this.props.handleEditCustomer({
-      id:this.state.customerId,
-      name:this.state.name,
-      idNumber:this.state.idNumber,
-      phoneNumber:this.state.phoneNumber,
-      token:this.props.loginLocal.login.token
-    })
-    await this.props.handleGetCustomers({
-      token:this.props.loginLocal.login.token
-    })
-    this.setState(this.state)
-    Alert.alert(
-      'Edit Customer Success',
-      `by : ${this.props.loginLocal.login.email}`,
-      [
-          {text: 'Ok', onPress: () => this.setState({
-            visibleModal: null,
-            disabled:!this.state.disabled,
-            name:'',
-            idNumber:'',
-            phoneNumber:''
-          })},
-      ],
-      {cancelable: false},
-      )
+  convertDate(data){
+    const date = new Date(data)
+    return date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear()+' : '+date.getHours()+':'+date.getMinutes()
   }
   render(){
     const {orders}=this.props.ordersLocal
     return(
       <Container>
       <HeaderMain title = 'Orders'/>
-      <Modal
-        isVisible={this.state.visibleModal === 'swipeable'}
-        backdropColor="#B4B3DB"
-        animationInTiming={500}
-        animationOutTiming={500}
-        onSwipeComplete={() => this.setState({visibleModal: null})}
-        swipeDirection={['up', 'left', 'right', 'down']}>
-        {this.renderModal()}
-      </Modal>
         <Content>
         {orders.length >0 ? 
         orders.map((item,index)=>{
@@ -167,17 +54,16 @@ class Orders extends Component{
                     name:item.name,
                     idNumber:item.identity_number,
                     phoneNumber:item.phone_number
-                    })}>
-                      <Left>
-                      <Text>Order # {item.id}</Text>
-                      </Left>   
+                    })}>  
                       <Body>
                           <Text>Order # {item.id}</Text>
-                          <Text note numberOfLines={1}>ID Number : {item.identity_number}</Text>
-                          <Text note numberOfLines={2}>Phone : {item.phone_number}</Text>
+                          <Text note numberOfLines={1}>Table Number : {item.table_id}</Text>
+                          <Text note numberOfLines={2}>ID Customer : {item.customer_id}</Text>
+                          <Text note numberOfLines={3}>Duration : {item.duration} minutes</Text>
+                          <Text note numberOfLines={2}>Order End Time : {this.convertDate(item.order_end_time)}</Text>
                       </Body>
                       <Right>
-                        <Text note>{item.createdAt}</Text>
+                        <Text note>{this.convertDate(item.createdAt)}</Text>
                         <View style = {{
                           borderWidth:2,
                           borderRadius:10,
@@ -196,17 +82,6 @@ class Orders extends Component{
             </View>
           }         
         </Content>
-
-        <Fab onPress = {()=> this.setState({
-            visibleModal: 'swipeable',
-            modal:'add',           
-            name:'',
-            idNumber:'',
-            phoneNumber:''})}
-          style={{ backgroundColor: '#5067FF' }}
-          position="bottomRight">            
-          <Icon name="plus" />
-        </Fab>
     </Container> 
     )
   }
@@ -222,6 +97,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    handleGetOrders: (params) => dispatch(actionOrders.handleGetOrders(params)),     
     handleGetCustomers: (params) => dispatch(actionCustomers.handleGetCustomers(params)),
     handleAddCustomer: (params) => dispatch(actionCustomers.handleAddCustomer(params)),
     handleEditCustomer: (params) => dispatch(actionCustomers.handleEditCustomer(params))     

@@ -43,7 +43,6 @@ export default function reducerOrders(state = initialState, action) {
           action.payload.data.forEach(item => {
             if(unique.filter(e=>e.table_id ==item.table_id)==''){
               unique.push(item)
-              // console.log(unique)
             }
           })
       return {

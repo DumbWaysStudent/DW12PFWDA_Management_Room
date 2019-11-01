@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TouchableOpacity, View, Dimensions, Alert, StyleSheet, Picker, AsyncStorage } from 'react-native'
+import { TouchableOpacity, View, Dimensions, Alert,Image, StyleSheet, Picker } from 'react-native'
 import { Text, Container, Button, Label, Input, Fab } from 'native-base'
 import Modal from 'react-native-modal'
 import { withNavigation } from 'react-navigation'
@@ -43,6 +43,7 @@ class Tables extends Component {
     clearInterval(this.interval)
     this.focusListener.remove();
   }
+
   async ordersChecker() {
     await this.props.handleGetQueues({
       token: this.props.loginLocal.login.token
@@ -68,9 +69,6 @@ class Tables extends Component {
       token: this.props.loginLocal.login.token
     })
     this.setState(this.state)
-  }
-  timer(){
-
   }
   renderTableModal = () => (
     <View style={styles.content}>
@@ -290,11 +288,16 @@ class Tables extends Component {
                 backgroundColor:
                   queues.filter(e => e.table_id == item.id) == '' ? 'grey' : 'green'
               }]}>
+                <View style = {{alignItems:'flex-end'}}>
                 <Text style={styles.itemName}>{item.name}</Text>
                 {queues.filter(e => e.table_id == item.id) == '' ? 
                 <Text style={styles.itemCaption}> Available</Text>
-                : <Text style={styles.itemCaption}>{queues[queues.findIndex(e=>e.table_id==item.id)].order_end_time/60<1 ? queues[queues.findIndex(e=>e.table_id==item.id)].order_end_time +' seconds left' : Math.floor(queues[queues.findIndex(e=>e.table_id==item.id)].order_end_time/60)+' minutes left'}</Text>
+                : <Text style={styles.itemCaption}>{
+                  queues[queues.findIndex(e=>e.table_id==item.id)].order_end_time/60<1 ? 
+                  queues[queues.findIndex(e=>e.table_id==item.id)].order_end_time +' seconds left' : 
+                  Math.floor(queues[queues.findIndex(e=>e.table_id==item.id)].order_end_time/60)+' minutes left'}</Text>
                 }
+                </View>
               </View>
             </TouchableOpacity>
           )}
@@ -340,10 +343,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   itemContainer: {
-    justifyContent: 'flex-end',
+    justifyContent:'space-between',
     borderRadius: 5,
     padding: 10,
     height: height * 0.1,
+    alignItems:'flex-end',
   },
   itemName: {
     fontSize: 16,

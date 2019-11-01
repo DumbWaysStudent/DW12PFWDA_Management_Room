@@ -7,7 +7,7 @@ import Orders from '../screens/Orders'
 import EditCustomer from '../screens/EditCustomer'
 import Customers from '../screens/Customers'
 import Profile from '../screens/Profile'
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import {createBottomTabNavigator} from 'react-navigation-tabs'
@@ -28,7 +28,7 @@ const BottomStack = createBottomTabNavigator({
         iconName = `columns`;
       } 
       else if (routeName === 'Orders') {
-        iconName = `book`;
+        iconName = `scroll`;
       }
       else if (routeName === 'Customers') {
         iconName = `users`;
