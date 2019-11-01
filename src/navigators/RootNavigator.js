@@ -17,7 +17,7 @@ const BottomStack = createBottomTabNavigator({
   Tables: Tables,
   Orders: Orders,
   Customers: Customers,
-  Profile: Profile
+  Settings: Profile
 },
 {
   defaultNavigationOptions: ({ navigation }) => ({
@@ -25,10 +25,10 @@ const BottomStack = createBottomTabNavigator({
       const { routeName } = navigation.state;
       let iconName;
       if (routeName === 'Tables') {
-        iconName = `building`;
+        iconName = `columns`;
       } 
       else if (routeName === 'Orders') {
-        iconName = `users`;
+        iconName = `book`;
       }
       else if (routeName === 'Customers') {
         iconName = `users`;

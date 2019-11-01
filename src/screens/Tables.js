@@ -9,6 +9,8 @@ import * as actionTables from '../redux/actions/actionTables'
 import * as actionOrders from '../redux/actions/actionOrders'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import HeaderMain from '../components/Headers/HeaderMain'
+
 
 const { height, width } = Dimensions.get('window');
 
@@ -78,7 +80,7 @@ class Tables extends Component {
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         <Button danger style={{ marginHorizontal: 10 }}
-          onPress={() => this.setState({ visibleModal: null ,disabled:!this.state.disabled})}>
+          onPress={() => this.setState({ visibleModal: null ,disabled:false})}>
           <Text>Cancel</Text>
         </Button>
         {this.state.modal == 'add' ?
@@ -128,7 +130,11 @@ class Tables extends Component {
       <View style={{ flexDirection: 'row', width: width * 0.7, borderWidth: 2, marginHorizontal: 90, marginBottom: 10 }}>
         <Input disabled={this.state.modal == 'checkIn' ? false : true} 
         backgroundColor={this.state.modal == 'checkIn' ? 'white' : 'grey'}
-        value={this.state.modal == 'checkIn' ? this.state.duration.toString() : this.state.duration.toString()+' mins'}
+        value={this.state.modal == 'checkIn' ? 
+        this.state.duration.toString() :
+        Math.floor(this.state.duration.toString()/60)<1 ? 
+        this.state.duration.toString()+' seconds' :
+        Math.floor(this.state.duration.toString()/60)+' minutes'}
          onChangeText={(e) => this.setState({ duration: e })} />
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
@@ -188,7 +194,7 @@ class Tables extends Component {
       'Check In Success',
       `by : ${this.props.loginLocal.login.email}, duration : ${this.state.duration} minutes`,
       [
-        { text: 'Yay', onPress: () => this.setState({ visibleModal: null, disabled: !this.state.disabled, duration: '',orderId:'' }) },
+        { text: 'Yay', onPress: () => this.setState({ visibleModal: null, disabled: false, duration: '',orderId:'' }) },
       ],
       { cancelable: false }
     )
@@ -205,7 +211,7 @@ class Tables extends Component {
         'Check Out Success',
         `by : ${this.props.loginLocal.login.email}`,
         [
-          { text: 'Yay', onPress: () => this.setState({ visibleModal: null, disabled: !this.state.disabled, duration: '',orderId:'' }) },
+          { text: 'Yay', onPress: () => this.setState({ visibleModal: null, disabled: false, duration: '',orderId:'' }) },
         ],
         { cancelable: false }
       )
@@ -229,10 +235,10 @@ class Tables extends Component {
   }
   render() {
     const { tables } = this.props.tablesLocal
-    console.log(this.props.tablesLocal)
     let {queues} = this.props.ordersLocal
     return (
       <Container>
+        <HeaderMain title = 'Tables'/>
         <Modal
           isVisible={this.state.visibleModal === 'swipeable'}
           backdropColor="#B4B3DB"

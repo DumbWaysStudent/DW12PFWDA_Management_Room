@@ -1,8 +1,8 @@
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'hoothootel' do
-  # Pods for hoothootel
+target 'Polley' do
+  # Pods for Polley
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -34,7 +34,7 @@ target 'hoothootel' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  target 'hoothootelTests' do
+  target 'PolleyTests' do
     inherit! :search_paths
     # Pods for testing
   end
@@ -42,10 +42,10 @@ target 'hoothootel' do
   use_native_modules!
 end
 
-target 'hoothootel-tvOS' do
-  # Pods for hoothootel-tvOS
+target 'Polley-tvOS' do
+  # Pods for Polley-tvOS
 
-  target 'hoothootel-tvOSTests' do
+  target 'Polley-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end

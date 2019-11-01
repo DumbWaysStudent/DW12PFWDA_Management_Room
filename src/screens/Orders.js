@@ -35,7 +35,7 @@ class Orders extends Component{
     // if(!token) this.props.navigation.navigate('Account')
     const { navigation } = this.props;
     this.focusListener = navigation.addListener('didFocus', () => {
-        this.props.handleGetQueues({
+        this.props.handleGetCustomers({
             token:this.props.loginLocal.login.token
         })
       this.setState(this.state)
@@ -142,10 +142,10 @@ class Orders extends Component{
       )
   }
   render(){
-    const {queues}=this.props.ordersLocal
+    const {orders}=this.props.ordersLocal
     return(
       <Container>
-      <HeaderMain title = 'Customers'/>
+      <HeaderMain title = 'Orders'/>
       <Modal
         isVisible={this.state.visibleModal === 'swipeable'}
         backdropColor="#B4B3DB"
@@ -156,25 +156,34 @@ class Orders extends Component{
         {this.renderModal()}
       </Modal>
         <Content>
-        {queues.length >0 ? queues.map((item,index)=>{
+        {orders.length >0 ? 
+        orders.map((item,index)=>{
               return(
                 <List key = {index}>
                   <ListItem avatar onPress = {()=>this.setState({
                     visibleModal: 'swipeable',
                     modal:'edit',
                     orderId:item.id,
-                    timeLeft:item.order_end_time,
-                    roomId:item.room_id,
-                    customerId:item.customer_id,
-                    isDone:item.is_done
-                    })}>  
+                    name:item.name,
+                    idNumber:item.identity_number,
+                    phoneNumber:item.phone_number
+                    })}>
+                      <Left>
+                      <Text>Order # {item.id}</Text>
+                      </Left>   
                       <Body>
-                          <Text>Order # {orderId}</Text>
-                          <Text note numberOfLines={1}> : {item.identity_number}</Text>
+                          <Text>Order # {item.id}</Text>
+                          <Text note numberOfLines={1}>ID Number : {item.identity_number}</Text>
                           <Text note numberOfLines={2}>Phone : {item.phone_number}</Text>
                       </Body>
                       <Right>
-                      <Text note>table # {roomId}</Text>
+                        <Text note>{item.createdAt}</Text>
+                        <View style = {{
+                          borderWidth:2,
+                          borderRadius:10,
+                          borderColor:item.is_done==false?'#c9b332':'#37bf2e',
+                          width:width*0.3,
+                          alignItems:'center'}}><Text style = {{color:item.is_done==false?'#c9b332':'#37bf2e'}} note>{item.is_done==false?'In Progress':'Completed'}</Text></View>
                       </Right>
                   </ListItem>
                 </List>
@@ -205,14 +214,17 @@ class Orders extends Component{
 
 const mapStateToProps = state => {
   return {
-      ordersLocal: state.orders,
+      customersLocal: state.customers,
       loginLocal: state.login,
+      ordersLocal: state.orders,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    handleGetQueues: (params) => dispatch(actionOrders.handleGetQueues(params)),
+    handleGetCustomers: (params) => dispatch(actionCustomers.handleGetCustomers(params)),
+    handleAddCustomer: (params) => dispatch(actionCustomers.handleAddCustomer(params)),
+    handleEditCustomer: (params) => dispatch(actionCustomers.handleEditCustomer(params))     
   }
 }
 

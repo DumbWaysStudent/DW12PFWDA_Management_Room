@@ -9,7 +9,7 @@ export const handleCheckIn = (params) => ({
         method:'POST',
         url:`${url}/orders`,
         data:{
-            room_id:params.roomId,
+            table_id:params.tableId,
             customer_id:params.customerId,
             duration:params.duration,
             order_end_time: moment().add(params.duration,'minutes').toISOString()

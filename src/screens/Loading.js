@@ -29,9 +29,9 @@ class Loading extends Component{
           await this.props.handleGetCustomers({
             token:this.props.loginLocal.login.token
           })
-          // await this.props.handleGetQueues({
-          //   token:this.props.loginLocal.login.token
-          // })
+          await this.props.handleGetQueues({
+            token:this.props.loginLocal.login.token
+          })
           this.props.navigation.navigate('Home')
           }, 0);
           
@@ -70,7 +70,6 @@ const styles = StyleSheet.create({
   const mapStateToProps = state => {
     return {
       loginLocal: state.login,
-
     }
   }
   

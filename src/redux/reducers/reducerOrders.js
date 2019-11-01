@@ -38,10 +38,12 @@ export default function reducerOrders(state = initialState, action) {
             ...state,
         };
       case `${types.GET_QUEUES}_FULFILLED`:
+        console.log(action.payload.data)
           let unique = [];
           action.payload.data.forEach(item => {
             if(unique.filter(e=>e.table_id ==item.table_id)==''){
               unique.push(item)
+              // console.log(unique)
             }
           })
       return {
