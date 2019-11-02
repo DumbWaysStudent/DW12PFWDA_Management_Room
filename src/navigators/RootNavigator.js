@@ -4,7 +4,6 @@ import Loading from '../screens/Loading'
 import EditProfile from '../screens/EditProfile'
 import Tables from '../screens/Tables'
 import Orders from '../screens/Orders'
-import EditCustomer from '../screens/EditCustomer'
 import Customers from '../screens/Customers'
 import Profile from '../screens/Profile'
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -58,7 +57,6 @@ const BottomStack = createBottomTabNavigator({
 const HomeStack = createStackNavigator({
   BottomStack : {screen: BottomStack,navigationOptions : ()=>({header : null})},
   EditProfile : {screen : EditProfile, navigationOptions : ()=>({header : null})},
-  EditCustomer : {screen : EditCustomer, navigationOptions : ()=>({header : null})},
 
 },{initialRouteName : 'BottomStack'}
 )

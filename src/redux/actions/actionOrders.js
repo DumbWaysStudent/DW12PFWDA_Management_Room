@@ -7,7 +7,7 @@ export const handleCheckIn = (params) => ({
     type: types.CHECK_IN,
     payload: axios({
         method:'POST',
-        url:`${url}/orders`,
+        url:`${url}/checkin`,
         data:{
             table_id:params.tableId,
             customer_id:params.customerId,
@@ -34,22 +34,22 @@ export const handleCheckIn = (params) => ({
     })
   });
 
-export const handleGetOrders = (params) => ({
-    type: types.GET_ORDERS,
+export const handleGetQueues = (params) => ({
+    type: types.GET_QUEUES,
     payload: axios({
         method:'GET',
-        url:`${url}/checkin`,
+        url:`${url}/queues`,
     headers:{
         Authorization:`Bearer ${params.token}`
         }
     })
 });
 
-export const handleGetQueues = (params) => ({
-    type: types.GET_QUEUES,
+export const handleGetOrders = (params) => ({
+    type: types.GET_ORDERS,
     payload: axios({
         method:'GET',
-        url:`${url}/queues`,
+        url:`${url}/orders`,
     headers:{
         Authorization:`Bearer ${params.token}`
         }

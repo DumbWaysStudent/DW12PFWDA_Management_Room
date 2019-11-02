@@ -1,4 +1,5 @@
 import * as types from './../types'
+import moment from 'moment'
 
 const initialState = {
   orders:[],
@@ -7,19 +8,45 @@ const initialState = {
 
 export default function reducerOrders(state = initialState, action) {
   switch (action.type) {
+    case `${types.GET_QUEUES}_PENDING`:
+      return {
+          ...state,
+      };
+    case `${types.GET_QUEUES}_FULFILLED`:
+    return {
+        ...state,
+        queues:action.payload.data
+      }
+    case `${types.GET_QUEUES}_REJECTED`:
+    return {
+        ...state,
+      }
     case `${types.CHECK_IN}_PENDING`:
         return {
           ...state,
         };
-      case `${types.CHECK_IN}_FULFILLED`:
-        return {
-          ...state,
-        };
-  
-      case `${types.CHECK_IN}_REJECTED`:
-        return {
-          ...state,
-        }    
+    case `${types.CHECK_IN}_FULFILLED`:
+      return {
+        ...state,
+      };
+
+    case `${types.CHECK_IN}_REJECTED`:
+      return {
+        ...state,
+      }    
+    case `${types.CHECK_OUT}_PENDING`:
+      return {
+        ...state,
+      };
+    case `${types.CHECK_OUT}_FULFILLED`:
+      return {
+        ...state,
+      };
+
+    case `${types.CHECK_OUT}_REJECTED`:
+      return {
+        ...state,
+      }    
       case `${types.GET_ORDERS}_PENDING`:
         return {
             ...state,
@@ -30,26 +57,6 @@ export default function reducerOrders(state = initialState, action) {
           orders:action.payload.data
         };
       case `${types.GET_ORDERS}_REJECTED`:
-      return {
-          ...state,
-        }
-      case `${types.GET_QUEUES}_PENDING`:
-        return {
-            ...state,
-        };
-      case `${types.GET_QUEUES}_FULFILLED`:
-        console.log(action.payload.data)
-          let unique = [];
-          action.payload.data.forEach(item => {
-            if(unique.filter(e=>e.table_id ==item.table_id)==''){
-              unique.push(item)
-            }
-          })
-      return {
-          ...state,
-          queues:unique
-        };
-      case `${types.GET_QUEUES}_REJECTED`:
       return {
           ...state,
         }

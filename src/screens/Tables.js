@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TouchableOpacity, View, Dimensions, Alert,Image, StyleSheet, Picker } from 'react-native'
+import { TouchableOpacity, View, Dimensions, Alert, StyleSheet, Picker, AsyncStorage } from 'react-native'
 import { Text, Container, Button, Label, Input, Fab } from 'native-base'
 import Modal from 'react-native-modal'
 import { withNavigation } from 'react-navigation'
@@ -25,17 +25,16 @@ class Tables extends Component {
       tableName: '',
       duration: '',
       disabled: false,
-      queues:'',
-      timer:''
+      orders: null
     }
   }
   async componentDidMount() {
     const { navigation } = this.props
     this.focusListener = navigation.addListener('didFocus', async () => {
-      await this.ordersChecker()
+      this.setState({disabled:false})
     })
-    await this.ordersChecker()
-    this.interval = setInterval(async () => await this.ordersChecker() , 5000)
+    await this.queuesChecker()
+    this.interval = setInterval(async () => await this.queuesChecker() , 5000)
     await this.tableChecker()
   }
   componentWillUnmount() {
@@ -44,26 +43,47 @@ class Tables extends Component {
     this.focusListener.remove();
   }
 
-  async ordersChecker() {
-    await this.props.handleGetQueues({
-      token: this.props.loginLocal.login.token
-    })
-    let {queues} = this.props.ordersLocal
-    let newQ=[]
-    queues.forEach(item => {
-      newQ.push({
-        id:item.id,
-        table_id:item.table_id,
-        order_end_time:moment(item.order_end_time).diff(moment(),'seconds')
-      })
-    })
-    this.props.ordersLocal.queues=newQ
-    await this.setState({timer:newQ[0]})
-    while (this.state.timer) {
-      if(this.state.timer.order_end_time<=0) await this.checkOut(this.state.timer.id)
+  async queuesChecker() {
+    let {queues}=this.props.ordersLocal
+    if(queues=='') return 0
+    this.setState({})
+    while (queues.length!==0) {
+      const timeLeft = moment(queues[0].order_end_time).diff(moment(),'seconds')
+      if(timeLeft<=0){
+        await this.checkOut(queues[0].id)
+        queues.splice(0,1)
+      } 
       else return 0
     }
    }
+
+  pressFunc(params){
+    const {queues}=this.props.ordersLocal
+    const tableId= params.tableId
+    const tableName= params.tableName
+    const index = queues.findIndex(e=>e.table_id==tableId)
+    if(index ==-1) {
+        this.setState({
+          visibleModal: 'swipeable',
+          modal: 'checkIn',
+          tableId,
+          tableName
+      })
+    }
+    else {
+        const duration=queues[queues.findIndex(e=>e.table_id==tableId)].order_end_time
+        const orderId=queues[queues.findIndex(e=>e.table_id==tableId)].id
+        this.setState({
+          visibleModal: 'swipeable',
+          modal: 'checkOut',
+          tableId,
+          tableName,
+          orderId,
+          duration:moment(duration).diff(moment(),'seconds')
+      })
+    }
+   }
+
   async tableChecker() {
     await this.props.handleGetTables({
       token: this.props.loginLocal.login.token
@@ -137,7 +157,7 @@ class Tables extends Component {
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         <Button danger style={styles.Button}
-          onPress={() => this.setState({ visibleModal: null, tableName: '',disabled:!this.state.disabled,duration:'' })}>
+          onPress={() => this.setState({ visibleModal: null, tableName: '',disabled:!this.state.disabled,duration:'',oderId:''})}>
           <Text>Cancel</Text>
         </Button>
         {this.state.modal == 'checkIn' ?
@@ -187,7 +207,13 @@ class Tables extends Component {
       duration,
       token: this.props.loginLocal.login.token
     })
-    await this.ordersChecker()
+    await this.props.handleGetQueues({
+      token:this.props.loginLocal.login.token
+    })
+    await this.props.handleGetOrders({
+      token:this.props.loginLocal.login.token
+    })
+    this.setState(this.state)
     Alert.alert(
       'Check In Success',
       `by : ${this.props.loginLocal.login.email}, duration : ${this.state.duration} minutes`,
@@ -203,7 +229,12 @@ class Tables extends Component {
       orderId,
       token: this.props.loginLocal.login.token
     })
-    await this.ordersChecker()
+    await this.props.handleGetQueues({
+      token:this.props.loginLocal.login.token
+    })
+    await this.props.handleGetOrders({
+      token:this.props.loginLocal.login.token
+    })
     if(this.state.orderId!==''){
       Alert.alert(
         'Check Out Success',
@@ -231,9 +262,37 @@ class Tables extends Component {
       { cancelable: false },
     )
   }
+  showStatus(tableId,tableName){
+    const {queues} = this.props.ordersLocal
+    if(queues.findIndex(e=>e.table_id==tableId)==-1){
+      return(
+        <View style={[styles.itemContainer, {backgroundColor:'grey'}]}>
+        <Text style={styles.itemName}>{tableName}</Text>
+        <Text style={styles.itemCaption}> Available</Text>
+      </View>
+      )  
+    }
+    else {
+      const orderEndTime = queues[queues.findIndex(e=>e.table_id==tableId)].order_end_time
+      const timeLeft = moment(orderEndTime).diff(moment(),'seconds')
+      if(timeLeft/60<1){
+        return(
+        <View style={[styles.itemContainer, {backgroundColor:'green'}]}>
+          <Text style={styles.itemName}>{tableName}</Text>
+          <Text style={styles.itemCaption}>{timeLeft} seconds left</Text>
+        </View>
+        )
+      }
+      else return(
+      <View style={[styles.itemContainer, {backgroundColor:'green'}]}>
+        <Text style={styles.itemName}>{tableName}</Text>
+        <Text style={styles.itemCaption}>{Math.floor(timeLeft/60)} minutes left</Text>
+      </View>
+      )
+    }
+  }
   render() {
     const { tables } = this.props.tablesLocal
-    let {queues} = this.props.ordersLocal
     return (
       <Container>
         <HeaderMain title = 'Tables'/>
@@ -242,7 +301,7 @@ class Tables extends Component {
           backdropColor="#B4B3DB"
           animationInTiming={500}
           animationOutTiming={500}
-          onSwipeComplete={() => this.setState({ visibleModal: null ,disabled:!this.state.disabled,duration:''})}
+          onSwipeComplete={() => this.setState({ visibleModal: null ,disabled:false,duration:''})}
           swipeDirection={['up', 'left', 'right', 'down']}>
           {this.state.modal == 'add' || this.state.modal == 'edit' ?
             this.renderTableModal()
@@ -256,24 +315,10 @@ class Tables extends Component {
           style={styles.gridView}
           renderItem={({ item, index }) => (
             <TouchableOpacity key={index}
-              onPress={() =>
-                queues.filter(e => e.table_id == item.id) == '' ?
-                  this.setState({
-                    visibleModal: 'swipeable',
-                    tableName: item.name,
-                    modal: 'checkIn',
-                    tableId: item.id
-                  })
-                  :
-                  this.setState({
-                    visibleModal: 'swipeable',
-                    tableName: item.name,
-                    modal: 'checkOut',
-                    tableId: item.id,
-                    duration:queues[queues.findIndex(e=>e.table_id==item.id)].order_end_time,
-                    orderId:queues[queues.findIndex(e=>e.table_id==item.id)].id
-                  })
-              }
+              onPress={() =>this.pressFunc({
+                tableId:item.id,
+                tableName:item.name
+              })}
               delayLongPress={400}
               onLongPress={() =>
                 this.setState({
@@ -284,21 +329,7 @@ class Tables extends Component {
                 })
               }
             >
-              <View style={[styles.itemContainer, {
-                backgroundColor:
-                  queues.filter(e => e.table_id == item.id) == '' ? 'grey' : 'green'
-              }]}>
-                <View style = {{alignItems:'flex-end'}}>
-                <Text style={styles.itemName}>{item.name}</Text>
-                {queues.filter(e => e.table_id == item.id) == '' ? 
-                <Text style={styles.itemCaption}> Available</Text>
-                : <Text style={styles.itemCaption}>{
-                  queues[queues.findIndex(e=>e.table_id==item.id)].order_end_time/60<1 ? 
-                  queues[queues.findIndex(e=>e.table_id==item.id)].order_end_time +' seconds left' : 
-                  Math.floor(queues[queues.findIndex(e=>e.table_id==item.id)].order_end_time/60)+' minutes left'}</Text>
-                }
-                </View>
-              </View>
+                {this.showStatus(item.id,item.name)} 
             </TouchableOpacity>
           )}
         />
@@ -328,7 +359,8 @@ const mapDispatchToProps = dispatch => {
     handleAddTable: (params) => dispatch(actionTables.handleAddTable(params)),
     handleGetTables: (params) => dispatch(actionTables.handleGetTables(params)),
     handleGetQueues: (params) => dispatch(actionOrders.handleGetQueues(params)),
-    handleEditTable: (params) => dispatch(actionTables.handleEditTable(params))
+    handleGetOrders: (params) => dispatch(actionOrders.handleGetOrders(params)),
+    handleEditTable: (params) => dispatch(actionTables.handleEditTable(params)),
   }
 }
 
@@ -343,7 +375,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   itemContainer: {
-    justifyContent:'space-between',
+    justifyContent: 'flex-end',
     borderRadius: 5,
     padding: 10,
     height: height * 0.1,

@@ -6,6 +6,7 @@ import * as actionAccount from '../redux/actions/actionAccount'
 import * as actionCustomers from '../redux/actions/actionCustomers'
 import * as actionOrders from '../redux/actions/actionOrders'
 import { connect } from 'react-redux'
+import { thisExpression } from '@babel/types'
 
 
 
@@ -21,9 +22,6 @@ class Loading extends Component{
           setTimeout(async () => {
           await this.props.handleStoreData(data)
           await this.props.handleGetTables({
-            token:this.props.loginLocal.login.token
-          })
-          await this.props.handleGetOrders({
             token:this.props.loginLocal.login.token
           })
           await this.props.handleGetCustomers({
@@ -70,13 +68,13 @@ const styles = StyleSheet.create({
   const mapStateToProps = state => {
     return {
       loginLocal: state.login,
+      ordersLocal: state.orders
     }
   }
   
   const mapDispatchToProps = dispatch => {
     return {
       handleGetTables: (params) => dispatch(actionTables.handleGetTables(params)), 
-      handleGetOrders: (params) => dispatch(actionOrders.handleGetOrders(params)),     
       handleGetCustomers: (params) => dispatch(actionCustomers.handleGetCustomers(params)),
       handleStoreData: (params) => dispatch(actionAccount.handleStoreData(params)),
       handleGetQueues: (params) => dispatch(actionOrders.handleGetQueues(params)),

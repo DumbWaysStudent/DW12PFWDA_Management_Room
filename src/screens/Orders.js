@@ -21,18 +21,25 @@ class Orders extends Component{
 
    async componentDidMount(){  
     const { navigation } = this.props;
-    this.focusListener = navigation.addListener('didFocus', () => {
-        this.props.handleGetOrders({
-            token:this.props.loginLocal.login.token
-        })
-      this.setState(this.state)
+    this.focusListener = navigation.addListener('didFocus', async () => {
+      this.setState({})
     });
+    this.interval = setInterval(async () => await this.setState({}) , 5000)
+    
   }
-
   componentWillUnmount() {
     // Remove the event listener
+    clearInterval(this.interval)
     this.focusListener.remove();
   }
+
+  async ordersChecker() {
+    await this.props.handleGetOrders({
+      token:this.props.loginLocal.login.token
+  })
+  this.setState({})
+  }
+
   convertDate(data){
     const date = new Date(data)
     return date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear()+' : '+date.getHours()+':'+date.getMinutes()
@@ -47,20 +54,16 @@ class Orders extends Component{
         orders.map((item,index)=>{
               return(
                 <List key = {index}>
-                  <ListItem avatar onPress = {()=>this.setState({
-                    visibleModal: 'swipeable',
-                    modal:'edit',
-                    orderId:item.id,
-                    name:item.name,
-                    idNumber:item.identity_number,
-                    phoneNumber:item.phone_number
-                    })}>  
+                  <ListItem avatar>  
+                  <Left>
+                    <Thumbnail source={{ uri: item.customer.image }} />
+                  </Left>
                       <Body>
-                          <Text>Order # {item.id}</Text>
-                          <Text note numberOfLines={1}>Table Number : {item.table_id}</Text>
-                          <Text note numberOfLines={2}>ID Customer : {item.customer_id}</Text>
+                          <Text>Invoice #POL0{item.id}</Text>
+                          <Text note numberOfLines={1}>Table : {item.table.name}</Text>
+                          <Text note numberOfLines={2}>Customer : {item.customer.name}</Text>
                           <Text note numberOfLines={3}>Duration : {item.duration} minutes</Text>
-                          <Text note numberOfLines={2}>Order End Time : {this.convertDate(item.order_end_time)}</Text>
+                          <Text note numberOfLines={2}>Ends At : {this.convertDate(item.order_end_time)}</Text>
                       </Body>
                       <Right>
                         <Text note>{this.convertDate(item.createdAt)}</Text>
@@ -68,8 +71,12 @@ class Orders extends Component{
                           borderWidth:2,
                           borderRadius:10,
                           borderColor:item.is_done==false?'#c9b332':'#37bf2e',
-                          width:width*0.3,
-                          alignItems:'center'}}><Text style = {{color:item.is_done==false?'#c9b332':'#37bf2e'}} note>{item.is_done==false?'In Progress':'Completed'}</Text></View>
+                          width:width*0.2,
+                          alignItems:'center'}}>
+                          <Text style = {{color:item.is_done==false?'#c9b332':'#37bf2e',fontSize:12}} note>
+                            {item.is_done==false?'In Progress':'Completed'}
+                          </Text>
+                          </View>
                       </Right>
                   </ListItem>
                 </List>

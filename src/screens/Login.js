@@ -64,8 +64,7 @@ class Login extends Component{
             <View>
                 <ImageBackground source = {require('../assets/background.jpg')} style = {styles.Background}>
                 <View style = {styles.Header}>
-                    {/* <Image style = {styles.Banner} source = {{uri : 'https://static01.nyt.com/images/2015/07/06/business/06webtoons/06webtoons-articleLarge.jpg?quality=90&auto=webp'}}/> */}
-                    <Text style = {{fontSize : 20}} >HootHootel Room Management</Text>
+                    <Text style = {{fontSize : 20}} >Polley Pool Arena Management</Text>
                 </View>    
                     <Form style = {styles.Form}>
                         <Label style = {styles.Label}>Email</Label>

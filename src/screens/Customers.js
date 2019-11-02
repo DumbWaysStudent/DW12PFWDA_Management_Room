@@ -7,6 +7,8 @@ import Modal from 'react-native-modal'
 import HeaderMain from '../components/Headers/HeaderMain'
 import { connect } from 'react-redux'
 import * as actionCustomers from '../redux/actions/actionCustomers'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import ImagePicker from 'react-native-image-picker';
 
 
 
@@ -19,6 +21,7 @@ class Customers extends Component{
       customerId:'',
       modal:'',
       name:'',
+      imageUrl:'',
       idNumber:'',
       phoneNumber:'',
       modalVisible: false,
@@ -35,10 +38,7 @@ class Customers extends Component{
     // if(!token) this.props.navigation.navigate('Account')
     const { navigation } = this.props;
     this.focusListener = navigation.addListener('didFocus', () => {
-        this.props.handleGetCustomers({
-            token:this.props.loginLocal.login.token
-        })
-      this.setState(this.state)
+      this.setState({})
     });
   }
 
@@ -46,7 +46,33 @@ class Customers extends Component{
     // Remove the event listener
     this.focusListener.remove();
   }
+  handlerCamera() {
+    const options = {
+        title: 'Select Avatar',
+        storageOptions: {
+            skipBackup: true,
+            path: 'images',
+        },
+    };
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
 
+      if (response.didCancel) {
+          console.log('User cancelled image picker');
+      } else if (response.error) {
+          console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+          console.log('User tapped custom button: ', response.customButton);
+      } else {
+          const source = response.uri ;
+          // You can also display the image using data:
+          // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+          this.setState({
+              imageUrl: source,
+          });
+      }
+    });
+  } 
   renderModal = () => (
     <View style={styles.content}>
       <Label>Name</Label>
@@ -60,6 +86,11 @@ class Customers extends Component{
       <Label>Phone Number</Label>
       <View style = {{flexDirection : 'row',borderWidth : 2, marginHorizontal : 40,marginVertical : 10}}>
           <Input value={this.state.phoneNumber} onChangeText = {(e)=>this.setState({phoneNumber : e})}/>
+      </View>
+      <Label>Image</Label>
+      <View style = {{flexDirection : 'row',borderWidth : 2, marginHorizontal : 40,marginVertical : 10}}>
+          <Input disabled={true} value={this.state.imageUrl}/>
+          <Icon style={{marginVertical: width*0.03,marginRight : width*0.03}} color="#0394fc" name = 'camera' size={25} onPress = {()=>this.handlerCamera()}></Icon>       
       </View>
       <View style = {{flexDirection:'row',justifyContent:'center'}}>
       <Button danger style={{marginHorizontal:10}}

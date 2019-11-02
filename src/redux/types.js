@@ -2,6 +2,7 @@
 export const LOGIN = 'LOGIN'
 export const REGISTER = 'REGISTER'
 export const STORE_DATA = 'STORE_DATA'
+export const UPDATE_USER = 'UPDATE_USER'
 
 //CUSTOMERS HANDLER
 export const GET_CUSTOMERS = 'GET_CUSTOMERS'

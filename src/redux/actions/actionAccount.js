@@ -13,7 +13,23 @@ export const handleLogin = (email,password) => ({
         }
     })
   });
+
   export const handleStoreData = (data) => ({
     type: types.STORE_DATA,
     payload: data
   })
+
+export const handleUpdateUser = (params) => ({
+    type: types.UPDATE_USER,
+    payload: axios({
+        method:'PUT',
+        url:`${url}/user?userId=${params.id}`,
+        data:{
+            email:params.email,
+            image:params.image
+        },
+        headers:{
+          Authorization:`Bearer ${params.token}`
+      }
+    })
+  });

@@ -21,7 +21,19 @@ export default function reducerAccount(state = initialState, action) {
         return {
           ...state,
         }
-        
+      case `${types.UPDATE_USER}_PENDING`:
+        return {
+          ...state,
+        };
+      case `${types.UPDATE_USER}_FULFILLED`:
+        return {
+          ...state,
+        }
+  
+      case `${types.UPDATE_USER}_REJECTED`:
+        return {
+          ...state,
+        } 
       case `${types.STORE_DATA}`:
         return {
           ...state,

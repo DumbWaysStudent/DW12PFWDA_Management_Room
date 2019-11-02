@@ -20,23 +20,20 @@ class EditProfile extends Component {
     }
 
     async componentDidMount(){ 
-         
         this.setState({newProfileName:this.props.navigation.getParam('name')})
     }
 
     async updateProfile(){
         if(this.state.imageUrl=='' ) this.setState({imageUrl:this.props.loginLocal.login.image})
         await this.props.handleUpdateUser({
-            token:String('Bearer '+this.props.loginLocal.login.token),
+            token:this.props.loginLocal.login.token,
             id:this.props.loginLocal.login.id,
-            newProfileName:this.state.newProfileName,
-            newProfilePic:this.state.imageUrl
+            email:this.state.newProfileName,
+            image:this.state.imageUrl
         })
-        console.log('---------------------------------')
-        console.log(this.state.imageUrl)
-        this.props.navigation.navigate('Profile',{
-            name:this.props.updateUserLocal.updateUser.name,
-            image:this.props.updateUserLocal.updateUser.image
+        this.props.navigation.navigate('Settings',{
+            name:this.state.newProfileName,
+            image:this.state.imageUrl
         })
     }
     handlerCamera() {
@@ -61,7 +58,6 @@ class EditProfile extends Component {
                 const source = response.uri ;
                 // You can also display the image using data:
                 // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-                console.log(source)
                 this.setState({
                     imageUrl: source,
                 });
@@ -78,8 +74,6 @@ class EditProfile extends Component {
 
 
     render() {
-        console.log(this.props.navigation.getParam('name'))
-        const{login}=this.props.loginLocal
         return (
             <Container>
                   <Header transparent>
