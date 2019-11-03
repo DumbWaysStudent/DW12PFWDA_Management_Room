@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Dimensions,Image,StyleSheet,Alert} from 'react-native'
+import {Dimensions,Image,StyleSheet,ImageBackground} from 'react-native'
 import {Text,Content,Container,List,ListItem,Left, Thumbnail, Body,Right,Button,View,Fab,Label,Input}from 'native-base'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import {withNavigation} from 'react-navigation'
@@ -22,6 +22,7 @@ class Orders extends Component{
    async componentDidMount(){  
     const { navigation } = this.props;
     this.focusListener = navigation.addListener('didFocus', async () => {
+      this.ordersChecker()
       this.setState({})
     });
     this.interval = setInterval(async () => await this.setState({}) , 5000)
@@ -48,7 +49,8 @@ class Orders extends Component{
     const {orders}=this.props.ordersLocal
     return(
       <Container>
-      <HeaderMain title = 'Orders'/>
+        <ImageBackground source = {require('../assets/background.jpg')} style={{width,height}} >
+        <HeaderMain title = 'Orders'/>
         <Content>
         {orders.length >0 ? 
         orders.map((item,index)=>{
@@ -56,7 +58,7 @@ class Orders extends Component{
                 <List key = {index}>
                   <ListItem avatar>  
                   <Left>
-                    <Thumbnail source={{ uri: item.customer.image }} />
+                    <Thumbnail square source={{ uri: item.customer.image }} />
                   </Left>
                       <Body>
                           <Text>Invoice #POL0{item.id}</Text>
@@ -84,11 +86,13 @@ class Orders extends Component{
             }) 
             : 
             <View style={{alignItems:'center',justifyContent:'center',marginTop:height*0.1}}>
-            <Image source={require('../assets/load.gif')}/>
-            <Text>Loading ...</Text>
+            <Image source={require('../assets/load.gif')} style={{height:height*0.2,width:width*0.5}}/>
+            <Text>Loading...</Text>
             </View>
           }         
         </Content>
+                </ImageBackground>
+      
     </Container> 
     )
   }

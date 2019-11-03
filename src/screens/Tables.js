@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TouchableOpacity, View, Dimensions, Alert, StyleSheet, Picker, AsyncStorage } from 'react-native'
+import { TouchableOpacity, View, Dimensions, Alert, StyleSheet, Picker,ImageBackground } from 'react-native'
 import { Text, Container, Button, Label, Input, Fab } from 'native-base'
 import Modal from 'react-native-modal'
 import { withNavigation } from 'react-navigation'
@@ -274,11 +274,13 @@ class Tables extends Component {
     }
     else {
       const orderEndTime = queues[queues.findIndex(e=>e.table_id==tableId)].order_end_time
+      const customer = queues[queues.findIndex(e=>e.table_id==tableId)].customer.name
       const timeLeft = moment(orderEndTime).diff(moment(),'seconds')
       if(timeLeft/60<1){
         return(
         <View style={[styles.itemContainer, {backgroundColor:'green'}]}>
           <Text style={styles.itemName}>{tableName}</Text>
+          <Text style={styles.itemCaption}>{customer}</Text>
           <Text style={styles.itemCaption}>{timeLeft} seconds left</Text>
         </View>
         )
@@ -286,6 +288,7 @@ class Tables extends Component {
       else return(
       <View style={[styles.itemContainer, {backgroundColor:'green'}]}>
         <Text style={styles.itemName}>{tableName}</Text>
+        <Text style={styles.itemCaption}>{customer}</Text>
         <Text style={styles.itemCaption}>{Math.floor(timeLeft/60)} minutes left</Text>
       </View>
       )
@@ -295,20 +298,8 @@ class Tables extends Component {
     const { tables } = this.props.tablesLocal
     return (
       <Container>
+        <ImageBackground source = {require('../assets/background.jpg')} style={{width,height}} >
         <HeaderMain title = 'Tables'/>
-        <Modal
-          isVisible={this.state.visibleModal === 'swipeable'}
-          backdropColor="#B4B3DB"
-          animationInTiming={500}
-          animationOutTiming={500}
-          onSwipeComplete={() => this.setState({ visibleModal: null ,disabled:false,duration:''})}
-          swipeDirection={['up', 'left', 'right', 'down']}>
-          {this.state.modal == 'add' || this.state.modal == 'edit' ?
-            this.renderTableModal()
-            :
-            this.renderCheck()
-          }
-        </Modal>
         <FlatGrid
           itemDimension={width * 0.2}
           items={tables}
@@ -333,6 +324,21 @@ class Tables extends Component {
             </TouchableOpacity>
           )}
         />
+        </ImageBackground>
+        <Modal
+          isVisible={this.state.visibleModal === 'swipeable'}
+          backdropColor="#B4B3DB"
+          animationInTiming={500}
+          animationOutTiming={500}
+          onSwipeComplete={() => this.setState({ visibleModal: null ,disabled:false,duration:''})}
+          swipeDirection={['up', 'left', 'right', 'down']}>
+          {this.state.modal == 'add' || this.state.modal == 'edit' ?
+            this.renderTableModal()
+            :
+            this.renderCheck()
+          }
+        </Modal>
+ 
         <Fab onPress={() => this.setState({ visibleModal: 'swipeable', modal: 'add',tableName:'' })}
           style={{ backgroundColor: '#5067FF' }}
           position="bottomRight">

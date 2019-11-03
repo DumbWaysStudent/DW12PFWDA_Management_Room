@@ -64,7 +64,8 @@ class Login extends Component{
             <View>
                 <ImageBackground source = {require('../assets/background.jpg')} style = {styles.Background}>
                 <View style = {styles.Header}>
-                    <Text style = {{fontSize : 20}} >Polley Pool Arena Management</Text>
+                    <Image source={require('../assets/logo.png')} style={{height:height*0.2,width:height*0.2,borderRadius:height*0.2}}/>
+                    <Text style = {{fontSize : 20}} >Polley Pool Arena Control Panel</Text>
                 </View>    
                     <Form style = {styles.Form}>
                         <Label style = {styles.Label}>Email</Label>
@@ -126,6 +127,6 @@ const styles = StyleSheet.create({
         marginTop:-height*0.1,
         alignItems:'center'
     },
-    Form:{marginTop:height*0.1},
+    Form:{marginTop:height*0.02},
     Label:{marginLeft : width*0.1}
 })

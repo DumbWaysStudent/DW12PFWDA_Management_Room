@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
-import {TouchableOpacity,Share,Image,Dimensions,StyleSheet,AsyncStorage} from 'react-native'
+import {TouchableOpacity,Share,Image,Dimensions,StyleSheet,ImageBackground} from 'react-native'
 import {View,Text,Content,Container,ListItem,Left, Body, Right}from 'native-base'
-import Icon from 'react-native-vector-icons/FontAwesome'
 import HeaderMain from '../components/Headers/HeaderMain'
 import { connect } from 'react-redux'
 
@@ -30,29 +29,31 @@ class Profile extends Component{
         const image = this.props.navigation.getParam('image')
         return(
             <Container>
-                <Content>
-                <HeaderMain title = 'My Profile'/>
-                  <View>
-                    <TouchableOpacity  onPress = {()=>this.props.navigation.navigate('EditProfile',{title : 'Edit Profile',
-                    name:!name? login.email:name,
-                    image:!image? login.image:image
-                    })}>
-                        <Body>
-                        <Image source = {{uri:!image ? login.image : image}} style={styles.profilePic} ></Image>
-                            <Text>
-                            {!name ? login.email : name}
-                            </Text>
-                        </Body>
-                    </TouchableOpacity>
-                    <View>
-                        <ListItem noIndent onPress = {()=>this.props.navigation.navigate('Account')}>
-                            <Left>
-                                <Text>Log Out</Text>
-                            </Left>
-                        </ListItem>
-                    </View>
-                  </View>
-                </Content>
+            <ImageBackground source = {require('../assets/background.jpg')} style={{width,height}} >
+            <HeaderMain title = 'My Profile'/>
+            <Content>
+                <View>
+                <TouchableOpacity  onPress = {()=>this.props.navigation.navigate('EditProfile',{title : 'Edit Profile',
+                name:!name? login.email:name,
+                image:!image? login.image:image
+                })}>
+                    <Body>
+                    <Image source = {{uri:!image ? login.image : image}} style={styles.profilePic} ></Image>
+                        <Text>
+                        {!name ? login.email : name}
+                        </Text>
+                    </Body>
+                </TouchableOpacity>
+                <View>
+                    <ListItem noIndent onPress = {()=>this.props.navigation.navigate('Account')}>
+                        <Left>
+                            <Text>Log Out</Text>
+                        </Left>
+                    </ListItem>
+                </View>
+                </View>
+            </Content>
+            </ImageBackground>        
             </Container>   
                   
         )

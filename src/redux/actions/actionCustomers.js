@@ -21,7 +21,8 @@ export const handleAddCustomer = (params) => ({
       data:{
         name : params.name,
         identity_number:params.idNumber,
-        phone_number:params.phoneNumber
+        phone_number:params.phoneNumber,
+        image:params.image
     },  
       headers:{
         Authorization:`Bearer ${params.token}`
@@ -37,7 +38,8 @@ export const handleAddCustomer = (params) => ({
       data:{
         name : params.name,
         identity_number:params.idNumber,
-        phone_number:params.phoneNumber
+        phone_number:params.phoneNumber,
+        image:params.image
     },
     headers:{
         Authorization:`Bearer ${params.token}`

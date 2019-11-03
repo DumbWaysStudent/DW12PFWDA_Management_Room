@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TouchableOpacity, Dimensions, TextInput, AsyncStorage,Text, StyleSheet, Image } from 'react-native'
+import { TouchableOpacity, Dimensions, TextInput, ImageBackground,Text, StyleSheet, Image } from 'react-native'
 import { Content, Container,Body,Button,Left,Right,Header} from 'native-base'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ImagePicker from 'react-native-image-picker';
@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import * as actionAccount from '../redux/actions/actionAccount'
 
 
-const { width } = Dimensions.get('window');
+const { height,width } = Dimensions.get('window');
 class EditProfile extends Component {
     constructor(props) {
         super(props)
@@ -76,30 +76,34 @@ class EditProfile extends Component {
     render() {
         return (
             <Container>
-                  <Header transparent>
-                    <Left>
-                        <Button transparent onPress = {()=>this.props.navigation.goBack()}>
-                        <Icon size = {25} name='arrow-left' />
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Text>Edit Profile</Text>
-                    </Body>
-                    <Right>
-                        <Button transparent onPress={()=>this.updateProfile()}>
-                        <Icon  size = {25}name='check' color = 'orange'/>
-                        </Button>
-                    </Right>
-                </Header>
-                <Content>
-                    <Body>
-                    {this.renderProfile()}
-                        <TouchableOpacity onPress={()=>this.handlerCamera()} style={styles.cameraStyle}>
-                            <Icon name='camera' size={25} />
-                        </TouchableOpacity>
-                        <TextInput value={this.state.newProfileName} onChangeText={(e)=>this.setState({newProfileName:e})} style={styles.TextInput}></TextInput>
-                    </Body>
-                </Content>
+            <ImageBackground source = {require('../assets/background.jpg')} style={{width,height}} >
+            <Header transparent>
+                <Left>
+                    <Button transparent onPress = {()=>this.props.navigation.goBack()}>
+                    <Icon size = {25} name='arrow-left' />
+                    </Button>
+                </Left>
+                <Body>
+                    <Text>Edit Profile</Text>
+                </Body>
+                <Right>
+                    <Button transparent onPress={()=>this.updateProfile()}>
+                    <Icon  size = {25}name='check' color = 'orange'/>
+                    </Button>
+                </Right>
+            </Header>
+            <Content>
+                <Body>
+                {this.renderProfile()}
+                    <TouchableOpacity onPress={()=>this.handlerCamera()} style={styles.cameraStyle}>
+                        <Icon name='camera' size={25} />
+                    </TouchableOpacity>
+                    <TextInput value={this.state.newProfileName} onChangeText={(e)=>this.setState({newProfileName:e})} style={styles.TextInput}></TextInput>
+                </Body>
+            </Content>
+            </ImageBackground>
+                  
+                
             </Container>
 
         )

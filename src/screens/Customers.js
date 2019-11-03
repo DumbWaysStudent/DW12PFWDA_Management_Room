@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Dimensions,Image,StyleSheet,Alert} from 'react-native'
+import {Dimensions,Image,StyleSheet,Alert,ImageBackground} from 'react-native'
 import {Text,Content,Container,List,ListItem,Left, Thumbnail, Body,Right,Button,View,Fab,Label,Input}from 'native-base'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import {withNavigation} from 'react-navigation'
@@ -122,6 +122,7 @@ class Customers extends Component{
       name:this.state.name,
       idNumber:this.state.idNumber,
       phoneNumber:this.state.phoneNumber,
+      image:this.state.imageUrl,
       token:this.props.loginLocal.login.token
     })
     await this.props.handleGetCustomers({
@@ -151,6 +152,7 @@ class Customers extends Component{
       name:this.state.name,
       idNumber:this.state.idNumber,
       phoneNumber:this.state.phoneNumber,
+      image:this.state.imageUrl,
       token:this.props.loginLocal.login.token
     })
     await this.props.handleGetCustomers({
@@ -176,17 +178,9 @@ class Customers extends Component{
     const {customers}=this.props.customersLocal
     return(
       <Container>
+      <ImageBackground source = {require('../assets/background.jpg')} style={{width,height}} >
       <HeaderMain title = 'Customers'/>
-      <Modal
-        isVisible={this.state.visibleModal === 'swipeable'}
-        backdropColor="#B4B3DB"
-        animationInTiming={500}
-        animationOutTiming={500}
-        onSwipeComplete={() => this.setState({visibleModal: null})}
-        swipeDirection={['up', 'left', 'right', 'down']}>
-        {this.renderModal()}
-      </Modal>
-        <Content>
+      <Content>
         {customers.length >0 ? customers.map((item,index)=>{
               return(
                 <List key = {index}>
@@ -196,10 +190,11 @@ class Customers extends Component{
                     customerId:item.id,
                     name:item.name,
                     idNumber:item.identity_number,
-                    phoneNumber:item.phone_number
+                    phoneNumber:item.phone_number,
+                    imageUrl:item.image
                     })}>
                       <Left>
-                      <Thumbnail square source={{uri: 'https://vignette.wikia.nocookie.net/spongebob/images/f/f2/Oldbash.jpg/revision/latest?cb=20170724203516'}}/>
+                      <Thumbnail square source={{uri:item.image}}/>
                       </Left>   
                       <Body>
                           <Text>{item.name}</Text>
@@ -217,7 +212,16 @@ class Customers extends Component{
             </View>
           }         
         </Content>
-
+      </ImageBackground>
+      <Modal
+        isVisible={this.state.visibleModal === 'swipeable'}
+        backdropColor="#B4B3DB"
+        animationInTiming={500}
+        animationOutTiming={500}
+        onSwipeComplete={() => this.setState({visibleModal: null,name:'',idNumber:'',phoneNumber:'',imageUrl:''})}
+        swipeDirection={['up', 'left', 'right', 'down']}>
+        {this.renderModal()}
+      </Modal>
         <Fab onPress = {()=> this.setState({
             visibleModal: 'swipeable',
             modal:'add',           
