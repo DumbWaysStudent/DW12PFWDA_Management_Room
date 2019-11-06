@@ -1,17 +1,11 @@
 import React, {Component} from 'react'
 import {TouchableOpacity,Share,Image,Dimensions,StyleSheet,ImageBackground} from 'react-native'
 import {View,Text,Content,Container,ListItem,Left, Body, Right}from 'native-base'
-import HeaderMain from '../components/Headers/HeaderMain'
+import HeaderShare from '../components/Headers/HeaderShare'
 import { connect } from 'react-redux'
 
 
 const {height,width} = Dimensions.get('window')
-const shareOptions = {
-    title: 'Title',
-    message: 'Message to share', // Note that according to the documentation at least one of "message" or "url" fields is required
-    url: 'www.example.com',
-    subject: 'Subject'
-  };
 class Profile extends Component{
     constructor(props) {
         super(props)
@@ -30,7 +24,7 @@ class Profile extends Component{
         return(
             <Container>
             <ImageBackground source = {require('../assets/background.jpg')} style={{width,height}} >
-            <HeaderMain title = 'My Profile'/>
+            <HeaderShare title = 'My Profile' navigation = {this.props.navigation}/>
             <Content>
                 <View>
                 <TouchableOpacity  onPress = {()=>this.props.navigation.navigate('EditProfile',{title : 'Edit Profile',
@@ -44,13 +38,6 @@ class Profile extends Component{
                         </Text>
                     </Body>
                 </TouchableOpacity>
-                <View>
-                    <ListItem noIndent onPress = {()=>this.props.navigation.navigate('Account')}>
-                        <Left>
-                            <Text>Log Out</Text>
-                        </Left>
-                    </ListItem>
-                </View>
                 </View>
             </Content>
             </ImageBackground>        

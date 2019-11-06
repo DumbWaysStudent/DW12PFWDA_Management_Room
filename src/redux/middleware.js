@@ -9,9 +9,9 @@ const reactNavigation = createReactNavigationReduxMiddleware(
   "root",
 );
 
-if (__DEV__) {
-  middlewares.push(createLogger());
-}
+// if (__DEV__) {
+//   middlewares.push(createLogger());
+// }
 
 middlewares.push(reactNavigation)
 middlewares.push(promise)

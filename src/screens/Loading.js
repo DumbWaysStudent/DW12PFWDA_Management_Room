@@ -6,7 +6,6 @@ import * as actionAccount from '../redux/actions/actionAccount'
 import * as actionCustomers from '../redux/actions/actionCustomers'
 import * as actionOrders from '../redux/actions/actionOrders'
 import { connect } from 'react-redux'
-import { thisExpression } from '@babel/types'
 
 
 
@@ -35,8 +34,6 @@ class Loading extends Component{
           
         }
       })
-      
-
     }
     render(){
         return(

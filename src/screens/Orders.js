@@ -50,7 +50,7 @@ class Orders extends Component{
     return(
       <Container>
         <ImageBackground source = {require('../assets/background.jpg')} style={{width,height}} >
-        <HeaderMain title = 'Orders'/>
+        <HeaderMain title = 'Orders' navigation= {this.props.navigation}/>
         <Content>
         {orders.length >0 ? 
         orders.map((item,index)=>{

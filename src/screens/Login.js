@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {Keyboard,View,Image,Dimensions,StyleSheet,Alert,AsyncStorage,ImageBackground}from 'react-native';
-import {Button,Input,Text,Form,Label,Toast} from 'native-base';
+import {Button,Input,Text,Form,Label} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as actionAccount from '../redux/actions/actionAccount'
 

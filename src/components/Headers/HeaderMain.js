@@ -6,12 +6,10 @@ import {StyleSheet,Dimensions,Share} from 'react-native'
 const {height, width } = Dimensions.get('window');
 
 const shareOptions ={
-    
-        title: 'Title',
-        message: 'Message to share', // Note that according to the documentation at least one of "message" or "url" fields is required
-        url: 'www.example.com',
-        subject: 'Subject'
- 
+    title: 'Polley',
+    message: "Polley is Here !!!", // Note that according to the documentation at least one of "message" or "url" fields is required
+    // url: 'www.example.com',
+    subject: 'Polley App'
   }
 onSharePress = () => Share.share(shareOptions);
 const HeaderMain = (props) => {
@@ -19,7 +17,7 @@ const HeaderMain = (props) => {
   <Header transparent>
       <Left>
         <Button transparent>
-          <Icon size = {25} name='bars' />
+          <Icon size = {25} name='bars' onPress={()=>props.navigation.toggleDrawer()} />
         </Button>
       </Left>
       <Body>
@@ -40,3 +38,5 @@ const styles = StyleSheet.create({
     borderRadius : 50,width : width*0.72,height :height*0.07
   } 
 })
+
+

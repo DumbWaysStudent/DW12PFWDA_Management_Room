@@ -45,7 +45,9 @@ class Tables extends Component {
 
   async queuesChecker() {
     let {queues}=this.props.ordersLocal
-    if(queues=='') return 0
+    if(queues=='') {
+      return 0
+    }
     this.setState({})
     while (queues.length!==0) {
       const timeLeft = moment(queues[0].order_end_time).diff(moment(),'seconds')
@@ -299,7 +301,7 @@ class Tables extends Component {
     return (
       <Container>
         <ImageBackground source = {require('../assets/background.jpg')} style={{width,height}} >
-        <HeaderMain title = 'Tables'/>
+        <HeaderMain title = 'Tables' navigation = {this.props.navigation}/>
         <FlatGrid
           itemDimension={width * 0.2}
           items={tables}

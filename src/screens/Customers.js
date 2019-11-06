@@ -24,13 +24,9 @@ class Customers extends Component{
       imageUrl:'',
       idNumber:'',
       phoneNumber:'',
-      modalVisible: false,
       disabled:false,
 
     }
-  }
-  setModalVisible(visible) {
-    this.setState({modalVisible: visible});
   }
 
    async componentDidMount(){  
@@ -46,9 +42,13 @@ class Customers extends Component{
     // Remove the event listener
     this.focusListener.remove();
   }
+  openCamera(){
+    this.setState({visibleModal:null})
+    this.handlerCamera()
+  }
   handlerCamera() {
     const options = {
-        title: 'Select Avatar',
+        title: 'Select Image',
         storageOptions: {
             skipBackup: true,
             path: 'images',
@@ -58,17 +58,18 @@ class Customers extends Component{
       console.log('Response = ', response);
 
       if (response.didCancel) {
-          console.log('User cancelled image picker');
       } else if (response.error) {
           console.log('ImagePicker Error: ', response.error);
       } else if (response.customButton) {
           console.log('User tapped custom button: ', response.customButton);
       } else {
-          const source = response.uri ;
+          const source =response.uri ;
+          console.log(source)
           // You can also display the image using data:
           // const source = { uri: 'data:image/jpeg;base64,' + response.data };
           this.setState({
-              imageUrl: source,
+              visibleModal:'swipeable',
+              imageUrl: source
           });
       }
     });
@@ -90,7 +91,8 @@ class Customers extends Component{
       <Label>Image</Label>
       <View style = {{flexDirection : 'row',borderWidth : 2, marginHorizontal : 40,marginVertical : 10}}>
           <Input disabled={true} value={this.state.imageUrl}/>
-          <Icon style={{marginVertical: width*0.03,marginRight : width*0.03}} color="#0394fc" name = 'camera' size={25} onPress = {()=>this.handlerCamera()}></Icon>       
+          <Icon style={{marginVertical: width*0.03,marginRight : width*0.03}} color="#0394fc" name = 'camera'
+          size={25} onPress = {()=>this.openCamera()}></Icon>       
       </View>
       <View style = {{flexDirection:'row',justifyContent:'center'}}>
       <Button danger style={{marginHorizontal:10}}
@@ -179,7 +181,7 @@ class Customers extends Component{
     return(
       <Container>
       <ImageBackground source = {require('../assets/background.jpg')} style={{width,height}} >
-      <HeaderMain title = 'Customers'/>
+      <HeaderMain title = 'Customers' navigation = {this.props.navigation}/>
       <Content>
         {customers.length >0 ? customers.map((item,index)=>{
               return(
@@ -214,6 +216,7 @@ class Customers extends Component{
         </Content>
       </ImageBackground>
       <Modal
+        onBackdropPress={()=>this.setState({visibleModal: null,name:'',idNumber:'',phoneNumber:'',imageUrl:''})}
         isVisible={this.state.visibleModal === 'swipeable'}
         backdropColor="#B4B3DB"
         animationInTiming={500}
