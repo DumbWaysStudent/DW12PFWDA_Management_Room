@@ -34,7 +34,7 @@ class Tables extends Component {
       this.setState({disabled:false})
     })
     await this.queuesChecker()
-    this.interval = setInterval(async () => await this.queuesChecker() , 5000)
+    this.interval = setInterval(async () => await this.queuesChecker() , 1000)
     await this.tableChecker()
   }
   componentWillUnmount() {
@@ -264,15 +264,19 @@ class Tables extends Component {
       { cancelable: false },
     )
   }
+  showColor(tableId){
+    const {queues} = this.props.ordersLocal
+    if(queues.findIndex(e=>e.table_id==tableId)==-1){
+      return '#00b5b5'
+    }
+    else return 'green'
+  }
   showStatus(tableId,tableName){
     const {queues} = this.props.ordersLocal
     if(queues.findIndex(e=>e.table_id==tableId)==-1){
       return(
-        <View style={[styles.itemContainer, {backgroundColor:'grey'}]}>
-        <Text style={styles.itemName}>{tableName}</Text>
         <Text style={styles.itemCaption}> Available</Text>
-      </View>
-      )  
+      )
     }
     else {
       const orderEndTime = queues[queues.findIndex(e=>e.table_id==tableId)].order_end_time
@@ -280,16 +284,14 @@ class Tables extends Component {
       const timeLeft = moment(orderEndTime).diff(moment(),'seconds')
       if(timeLeft/60<1){
         return(
-        <View style={[styles.itemContainer, {backgroundColor:'green'}]}>
-          <Text style={styles.itemName}>{tableName}</Text>
+          <View style={{alignItems:'flex-end'}}>
           <Text style={styles.itemCaption}>{customer}</Text>
           <Text style={styles.itemCaption}>{timeLeft} seconds left</Text>
-        </View>
+          </View>
         )
       }
       else return(
-      <View style={[styles.itemContainer, {backgroundColor:'green'}]}>
-        <Text style={styles.itemName}>{tableName}</Text>
+      <View style={{alignItems:'flex-end'}}>
         <Text style={styles.itemCaption}>{customer}</Text>
         <Text style={styles.itemCaption}>{Math.floor(timeLeft/60)} minutes left</Text>
       </View>
@@ -322,7 +324,10 @@ class Tables extends Component {
                 })
               }
             >
-                {this.showStatus(item.id,item.name)} 
+            <View style={[styles.itemContainer, {backgroundColor:this.showColor(item.id)}]}>
+              <Text style={styles.itemName}>{item.name}</Text>
+              {this.showStatus(item.id,item.name)} 
+            </View>
             </TouchableOpacity>
           )}
         />

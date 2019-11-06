@@ -1,1 +1,1 @@
-export const url = 'http://192.168.43.24:9876/api/v1'
+export const url = 'https://polley-api.herokuapp.com/api/v1'

@@ -64,7 +64,6 @@ class Customers extends Component{
           console.log('User tapped custom button: ', response.customButton);
       } else {
           const source =response.uri ;
-          console.log(source)
           // You can also display the image using data:
           // const source = { uri: 'data:image/jpeg;base64,' + response.data };
           this.setState({

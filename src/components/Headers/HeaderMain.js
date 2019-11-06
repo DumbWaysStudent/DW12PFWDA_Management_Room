@@ -25,7 +25,7 @@ const HeaderMain = (props) => {
       </Body>
       <Right>
         <Button transparent onPress={()=>onSharePress()}>
-          <Icon  size = {25}name='share-alt' color = 'darkblue'/>
+          <Icon  size = {25}name='share-alt' color = '#0388fc'/>
         </Button>
       </Right>
   </Header>)

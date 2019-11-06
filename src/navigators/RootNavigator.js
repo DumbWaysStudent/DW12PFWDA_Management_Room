@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Login from '../screens/Login'
+import Splash from '../screens/Splash'
 import Loading from '../screens/Loading'
 import EditProfile from '../screens/EditProfile'
 import Tables from '../screens/Tables'
@@ -9,12 +10,13 @@ import Profile from '../screens/Profile'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { Text, View, Image, ScrollView, StyleSheet,Dimensions} from 'react-native';
-import {ListItem} from 'native-base'
-import {createAppContainer,createSwitchNavigator,SafeAreaView,} from 'react-navigation';
+import {createAppContainer,SafeAreaView,} from 'react-navigation';
 import {createDrawerNavigator,DrawerItems} from 'react-navigation-drawer'
 import { createStackNavigator } from 'react-navigation-stack';
 import {createBottomTabNavigator} from 'react-navigation-tabs'
-import { Item } from 'native-base'
+import {Button} from 'native-base'
+import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
+import { Transition } from 'react-native-reanimated';
 
 const {height,width}=Dimensions.get('window')
 const BottomStack = createBottomTabNavigator({
@@ -37,7 +39,6 @@ const BottomStack = createBottomTabNavigator({
         iconName = `users`;
       }
       else iconName = `cog`;
-
       // You can return any component that you like here! We usually use an
       // icon component from react-native-vector-icons
       return <Icon name={iconName} size={25} color={tintColor} />;
@@ -59,13 +60,15 @@ const CustomDrawerContentComponent = props => (
         style={styles.image}
         source={require('../assets/logo.png')}
       />
-      <Text style={{fontSize:18,textAlign:'center'}}>Polley Table Management</Text>
+      <Text style={{fontSize:18,textAlign:'center'}}>Polley Pool Arena</Text>
       </View>
 
       <DrawerItems {...props} />
       <View style={{marginLeft:width*0.045,flexDirection:'row'}}>
-      <Icon color="#615c5c" size={24} onPress={()=>props.navigation.navigate("Account")} name ="sign-out-alt"/>
+      <Button transparent onPress={()=>props.navigation.navigate("Account")}>
+      <Icon color="#615c5c" size={24}  name ="sign-out-alt"/>
       <Text style={{color:'black',fontSize:14,fontWeight:'bold',marginLeft:width*0.09}}>Sign Out</Text>
+      </Button>
       </View>
     </SafeAreaView>
   </ScrollView>
@@ -78,7 +81,8 @@ const ProfileStack = createStackNavigator({
   EditProfile:{screen:EditProfile,navigationOptions: {
     header: () => null
   }},
-},{initialRouteName:'Profile'})
+},{initialRouteName:'Profile'}
+)
 
 const Navigator = createDrawerNavigator({
   BottomStack:{screen:BottomStack,navigationOptions: {
@@ -93,19 +97,36 @@ const Navigator = createDrawerNavigator({
   }},
   },
   {
-    drawerType: 'front',
+    drawerType: 'slide',
     // drawerPosition: 'right',
     drawerWidth: width*0.6,
     drawerBackgroundColor: '#f2fcfc',
     contentComponent: CustomDrawerContentComponent
   },
 )
-const RootNavigator = createSwitchNavigator({
+
+const RootNavigator = createAnimatedSwitchNavigator({
   Loading: Loading,
   Account : Login,
   Home: Navigator,
- 
-})
+  Splash:Splash
+  },{
+    // The previous screen will slide to the bottom while the next screen will fade in
+    transition:
+    (
+      <Transition.Sequence>
+        <Transition.Out
+          type="slide-bottom"
+          durationMs={500}
+          interpolation="easeIn"
+        />
+        <Transition.In type="slide-top" durationMs={500} />
+      </Transition.Sequence>
+    )
+    ,initialRouteName:"Splash"
+  }
+
+)
 
 export default createAppContainer(RootNavigator);
 const styles = StyleSheet.create({

@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
   const mapStateToProps = state => {
     return {
       loginLocal: state.login,
-      ordersLocal: state.orders
     }
   }
   
