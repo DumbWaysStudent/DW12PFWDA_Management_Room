@@ -2,7 +2,7 @@
 import * as types from '../types'
 import axios from 'axios'
 import {url} from '../url'
-export const handleLogin = (email,password) => ({
+  export const handleLogin = (email,password) => ({
     type: types.LOGIN,
     payload: axios({
         method:'POST',
@@ -19,7 +19,7 @@ export const handleLogin = (email,password) => ({
     payload: data
   })
 
-export const handleUpdateUser = (params) => ({
+  export const handleUpdateUser = (params) => ({
     type: types.UPDATE_USER,
     payload: axios({
         method:'PUT',

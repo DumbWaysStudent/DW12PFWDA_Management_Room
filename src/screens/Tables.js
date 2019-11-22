@@ -269,7 +269,7 @@ class Tables extends Component {
     if(queues.findIndex(e=>e.table_id==tableId)==-1){
       return '#00b5b5'
     }
-    else return 'green'
+    else return '#09ab23'
   }
   showStatus(tableId,tableName){
     const {queues} = this.props.ordersLocal

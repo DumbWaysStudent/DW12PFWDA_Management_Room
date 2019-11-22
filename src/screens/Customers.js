@@ -139,7 +139,8 @@ class Customers extends Component{
             disabled:!this.state.disabled,
             name:'',
             idNumber:'',
-            phoneNumber:''
+            phoneNumber:'',
+            imageUrl:''
           })},
       ],
       {cancelable: false},
